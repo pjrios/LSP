@@ -1,0 +1,1020 @@
+{
+  "version": 2,
+  "name": "Aprende LSP",
+  "startPage": "bienvenida",
+  "pages": [
+    {
+      "id": "bienvenida",
+      "name": "Acceso",
+      "access": "guestOnly",
+      "file": "pages/bienvenida.html"
+    },
+    {
+      "id": "inicio",
+      "name": "Inicio",
+      "access": "authenticated",
+      "file": "pages/inicio.html"
+    },
+    {
+      "id": "catalogo",
+      "name": "Aprender",
+      "access": "authenticated",
+      "file": "pages/catalogo.html"
+    },
+    {
+      "id": "detalle",
+      "name": "Detalle de práctica",
+      "access": "authenticated",
+      "file": "pages/detalle.html"
+    },
+    {
+      "id": "resultados",
+      "name": "Resultados",
+      "access": "authenticated",
+      "file": "pages/resultados.html"
+    },
+    {
+      "id": "progreso",
+      "name": "Progreso",
+      "access": "authenticated",
+      "file": "pages/progreso.html"
+    },
+    {
+      "id": "perfil",
+      "name": "Perfil",
+      "access": "authenticated",
+      "file": "pages/perfil.html"
+    },
+    {
+      "id": "gestion",
+      "name": "Crear",
+      "access": "authenticated",
+      "file": "pages/gestion.html"
+    },
+    {
+      "id": "editor-practica",
+      "name": "Crear · Nueva práctica",
+      "access": "authenticated",
+      "file": "pages/editor-practica.html"
+    }
+  ],
+  "connections": [
+    {
+      "id": "inicio-flow-1",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "inicio-flow-2",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "inicio-flow-3",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "inicio-flow-4",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "inicio-flow-5",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "inicio-flow-6",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "inicio-flow-7",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:2/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "inicio-flow-8",
+      "sourcePage": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:2/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "catalogo-flow-1",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "catalogo-flow-2",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "catalogo-flow-3",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "catalogo-flow-4",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "catalogo-flow-5",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "catalogo-flow-6",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "catalogo-flow-7",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "detalle",
+      "context": {
+        "record": {
+          "dataSourceId": "supabase-table_practices",
+          "recordId": "$record.id"
+        }
+      }
+    },
+    {
+      "id": "catalogo-flow-8",
+      "sourcePage": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "detalle",
+      "context": {
+        "record": {
+          "dataSourceId": "supabase-table_practices",
+          "recordId": "$record.id"
+        }
+      }
+    },
+    {
+      "id": "detalle-flow-1",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "detalle-flow-2",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "detalle-flow-3",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "detalle-flow-4",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "detalle-flow-5",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "detalle-flow-6",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "resultados-flow-1",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "resultados-flow-2",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "resultados-flow-3",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "resultados-flow-4",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "resultados-flow-5",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "resultados-flow-6",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "resultados-flow-7",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/main:1/div:2/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "detalle"
+    },
+    {
+      "id": "resultados-flow-8",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/main:1/div:2/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "resultados-flow-9",
+      "sourcePage": "resultados",
+      "elementId": "resultados::div:1/main:1/div:2/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "progreso-flow-1",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "progreso-flow-2",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "progreso-flow-3",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "progreso-flow-4",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "progreso-flow-5",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "progreso-flow-6",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "progreso-flow-7",
+      "sourcePage": "progreso",
+      "elementId": "progreso::div:1/main:1/div:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "perfil-flow-1",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "perfil-flow-2",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "perfil-flow-3",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "perfil-flow-4",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "perfil-flow-5",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "perfil-flow-6",
+      "sourcePage": "perfil",
+      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "gestion-flow-1",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "gestion-flow-2",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "gestion-flow-3",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "gestion-flow-4",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "gestion-flow-5",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "gestion-flow-6",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    },
+    {
+      "id": "gestion-flow-7",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/main:1/section:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "editor-practica"
+    },
+    {
+      "id": "gestion-flow-8",
+      "sourcePage": "gestion",
+      "elementId": "gestion::div:1/main:1/section:2/article:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "editor-practica",
+      "context": {
+        "record": {
+          "dataSourceId": "supabase-table_practices",
+          "recordId": "$record.id"
+        }
+      }
+    },
+    {
+      "id": "editor-practica-flow-1",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "editor-practica-flow-2",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "inicio"
+    },
+    {
+      "id": "editor-practica-flow-3",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:2",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
+    },
+    {
+      "id": "editor-practica-flow-4",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:3",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "progreso"
+    },
+    {
+      "id": "editor-practica-flow-5",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:4",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "perfil"
+    },
+    {
+      "id": "editor-practica-flow-6",
+      "sourcePage": "editor-practica",
+      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:5",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "gestion"
+    }
+  ],
+  "elementOverrides": [],
+  "authentication": {
+    "provider": "supabase",
+    "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+    "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+    "loginPage": "bienvenida",
+    "afterLoginPage": "inicio",
+    "afterLogoutPage": "bienvenida"
+  },
+  "dataSources": [
+    {
+      "id": "supabase-table_profiles",
+      "name": "profiles",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "profiles",
+      "publishedOnly": false,
+      "requiresAuth": true
+    },
+    {
+      "id": "supabase-table_user_roles",
+      "name": "user_roles",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "user_roles",
+      "publishedOnly": false,
+      "requiresAuth": true
+    },
+    {
+      "id": "supabase-table_practices",
+      "name": "practices",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "practices",
+      "publishedOnly": true,
+      "requiresAuth": false,
+      "orderColumn": "sort_order",
+      "orderDirection": "asc"
+    },
+    {
+      "id": "supabase-table_practice_attempts",
+      "name": "practice_attempts",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "practice_attempts",
+      "publishedOnly": false,
+      "requiresAuth": true,
+      "orderColumn": "created_at",
+      "orderDirection": "desc"
+    },
+    {
+      "id": "supabase-table_practice_progress",
+      "name": "practice_progress",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "practice_progress",
+      "publishedOnly": false,
+      "requiresAuth": true,
+      "orderColumn": "last_practiced_at",
+      "orderDirection": "desc"
+    },
+    {
+      "id": "supabase-table_favorite_practices",
+      "name": "favorite_practices",
+      "type": "supabase",
+      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
+      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
+      "table": "favorite_practices",
+      "publishedOnly": false,
+      "requiresAuth": true,
+      "orderColumn": "created_at",
+      "orderDirection": "desc"
+    }
+  ],
+  "bindings": [
+    {
+      "id": "inicio-binding-1",
+      "pageId": "inicio",
+      "elementId": "inicio::div:1/main:1/section:1/h1:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_profiles",
+      "sourceMode": "first",
+      "field": "display_name"
+    },
+    {
+      "id": "inicio-binding-2",
+      "pageId": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "score"
+    },
+    {
+      "id": "inicio-binding-3",
+      "pageId": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:2",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "duration_seconds"
+    },
+    {
+      "id": "inicio-binding-4",
+      "pageId": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:1/article:1/div:2/small:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "created_at"
+    },
+    {
+      "id": "catalogo-binding-1",
+      "pageId": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "difficulty"
+    },
+    {
+      "id": "catalogo-binding-2",
+      "pageId": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:2/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "estimated_minutes"
+    },
+    {
+      "id": "catalogo-binding-3",
+      "pageId": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1/h2:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "title"
+    },
+    {
+      "id": "catalogo-binding-4",
+      "pageId": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1/p:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "description"
+    },
+    {
+      "id": "detalle-binding-1",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/div:1/span:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "difficulty"
+    },
+    {
+      "id": "detalle-binding-2",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/div:1/span:1/span:2",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "estimated_minutes"
+    },
+    {
+      "id": "detalle-binding-3",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/div:1/h1:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "title"
+    },
+    {
+      "id": "detalle-binding-4",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/div:1/p:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "description"
+    },
+    {
+      "id": "progreso-binding-1",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:1/p:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_progress",
+      "sourceMode": "context",
+      "field": "status"
+    },
+    {
+      "id": "progreso-binding-2",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:1/small:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_progress",
+      "sourceMode": "context",
+      "field": "last_practiced_at"
+    },
+    {
+      "id": "progreso-binding-3",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:1/b:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_progress",
+      "sourceMode": "context",
+      "field": "best_score"
+    },
+    {
+      "id": "progreso-binding-4",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:2/b:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_progress",
+      "sourceMode": "context",
+      "field": "attempts_count"
+    },
+    {
+      "id": "progreso-binding-5",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:1/small:1/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "created_at"
+    },
+    {
+      "id": "progreso-binding-6",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:1/b:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "score"
+    },
+    {
+      "id": "progreso-binding-7",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:2/span:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "sourceMode": "context",
+      "field": "duration_seconds"
+    },
+    {
+      "id": "perfil-binding-1",
+      "pageId": "perfil",
+      "elementId": "perfil::div:1/main:1/section:1/div:2/h1:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_profiles",
+      "sourceMode": "first",
+      "field": "display_name"
+    },
+    {
+      "id": "perfil-binding-2",
+      "pageId": "perfil",
+      "elementId": "perfil::div:1/main:1/section:1/div:2/p:2",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_profiles",
+      "sourceMode": "first",
+      "field": "bio"
+    },
+    {
+      "id": "gestion-binding-1",
+      "pageId": "gestion",
+      "elementId": "gestion::div:1/main:1/section:2/article:1/h2:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "title"
+    },
+    {
+      "id": "gestion-binding-2",
+      "pageId": "gestion",
+      "elementId": "gestion::div:1/main:1/section:2/article:1/p:1",
+      "target": "text",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "description"
+    },
+    {
+      "id": "editor-practica-binding-1",
+      "pageId": "editor-practica",
+      "elementId": "editor-practica::div:1/main:1/form:1/section:1/div:1/input:1",
+      "target": "value",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "title"
+    },
+    {
+      "id": "editor-practica-binding-2",
+      "pageId": "editor-practica",
+      "elementId": "editor-practica::div:1/main:1/form:1/section:1/div:1/textarea:1",
+      "target": "value",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "description"
+    },
+    {
+      "id": "editor-practica-binding-3",
+      "pageId": "editor-practica",
+      "elementId": "editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:1/select:1",
+      "target": "value",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "difficulty"
+    },
+    {
+      "id": "editor-practica-binding-4",
+      "pageId": "editor-practica",
+      "elementId": "editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:2/input:1",
+      "target": "value",
+      "contextKey": "record",
+      "dataSourceId": "supabase-table_practices",
+      "sourceMode": "context",
+      "field": "estimated_minutes"
+    }
+  ],
+  "repeaters": [
+    {
+      "id": "inicio-repeater-1",
+      "pageId": "inicio",
+      "elementId": "inicio::div:1/main:1/section:2/div:1/article:1",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "itemContext": "record",
+      "pageSize": 1,
+      "emptyMessage": "Todavía no tienes actividad. Revisa el catálogo para comenzar.",
+      "errorMessage": "No pudimos cargar tu actividad. Intenta nuevamente."
+    },
+    {
+      "id": "catalogo-repeater-1",
+      "pageId": "catalogo",
+      "elementId": "catalogo::div:1/main:1/section:2/div:1/article:1",
+      "dataSourceId": "supabase-table_practices",
+      "itemContext": "record",
+      "pageSize": 6,
+      "pagination": true,
+      "emptyMessage": "Todavía no hay prácticas disponibles.",
+      "errorMessage": "No pudimos cargar las prácticas. Intenta nuevamente."
+    },
+    {
+      "id": "progreso-repeater-1",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1",
+      "dataSourceId": "supabase-table_practice_progress",
+      "itemContext": "record",
+      "pageSize": 6,
+      "emptyMessage": "Todavía no has comenzado una práctica.",
+      "errorMessage": "No pudimos cargar tu progreso. Intenta nuevamente."
+    },
+    {
+      "id": "progreso-repeater-2",
+      "pageId": "progreso",
+      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "itemContext": "record",
+      "pageSize": 8,
+      "emptyMessage": "Tus intentos aparecerán aquí después de practicar.",
+      "errorMessage": "No pudimos cargar tus intentos. Intenta nuevamente."
+    },
+    {
+      "id": "gestion-repeater-1",
+      "pageId": "gestion",
+      "elementId": "gestion::div:1/main:1/section:2/article:1",
+      "dataSourceId": "supabase-table_practices",
+      "itemContext": "record",
+      "pageSize": 12,
+      "pagination": true,
+      "emptyMessage": "Todavía no has creado prácticas.",
+      "errorMessage": "No pudimos cargar tus prácticas. Intenta nuevamente.",
+      "userFilterColumn": "created_by",
+      "includeUnpublished": true
+    }
+  ],
+  "motionActivities": [
+    {
+      "id": "detalle-motion-1",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/section:1/div:1/section:1",
+      "mode": "compare",
+      "componentType": "compare",
+      "input": {
+        "type": "camera",
+        "durationMs": 10000,
+        "facingMode": "user"
+      },
+      "reference": {
+        "type": "data",
+        "dataSourceId": "supabase-table_practices",
+        "contextKey": "record",
+        "recordMode": "context",
+        "videoField": "media_url",
+        "templateField": "mediapipe_reference"
+      },
+      "features": {
+        "hands": true,
+        "pose": true,
+        "face": false
+      },
+      "processing": {
+        "checkpointReduction": true,
+        "minConfidence": 0.5,
+        "smoothing": 3
+      },
+      "passingScore": 75,
+      "persistence": {
+        "dataSourceId": "supabase-table_practice_attempts",
+        "contextKey": "record",
+        "relationField": "practice_id",
+        "scoreField": "score",
+        "feedbackField": "feedback",
+        "resultField": "mediapipe_result",
+        "durationField": "duration_seconds"
+      }
+    },
+    {
+      "id": "editor-practica-motion-1",
+      "pageId": "editor-practica",
+      "elementId": "editor-practica::div:1/main:1/form:1/section:2/div:2/section:1",
+      "mode": "reference",
+      "componentType": "compare",
+      "input": {
+        "type": "camera",
+        "durationMs": 10000,
+        "facingMode": "user"
+      },
+      "reference": {
+        "type": "none"
+      },
+      "features": {
+        "hands": true,
+        "pose": true,
+        "face": true
+      },
+      "processing": {
+        "checkpointReduction": true,
+        "minConfidence": 0.5,
+        "smoothing": 3
+      },
+      "passingScore": 75
+    }
+  ]
+}
