@@ -1,8 +1,8 @@
 (function installNavigationRuntime(runtimeWindow = window, runtimeDocument = document) {
-	const config = runtimeWindow.__PSL_NAVIGATION__;
+	const config = runtimeWindow.__BUILDER_NAVIGATION__;
 	if (!config) return () => undefined;
 	const runtimeConfig = config;
-	const contextParameterPrefix = "psl-context-";
+	const contextParameterPrefix = "context-";
 	function elementPosition(element) {
 		let position = 1;
 		let sibling = element.previousElementSibling;
@@ -30,7 +30,7 @@
 			"NOSCRIPT",
 			"TEMPLATE"
 		].includes(element.tagName)) {
-			element.dataset.pslElementId = stableElementId(element);
+			element.dataset.builderElementId = stableElementId(element);
 		}
 	});
 	function contextFromLocation() {
@@ -62,7 +62,7 @@
 		afterLoginPage: runtimeConfig.currentPage,
 		afterLogoutPage: runtimeConfig.currentPage
 	} : undefined);
-	const authStorageKey = authProject ? `psl-auth:${new URL(authProject.projectUrl).hostname}` : "psl-auth";
+	const authStorageKey = authProject ? `builder-auth:${new URL(authProject.projectUrl).hostname}` : "builder-auth";
 	const authReturnStorageKey = `${authStorageKey}:return-page`;
 	const practiceVideoBucket = "practice-reference-videos";
 	function storedSession() {
@@ -128,40 +128,44 @@
 		}
 	}
 	const authSessionPromise = authProject ? loadAuthSession() : Promise.resolve(undefined);
-	const roleVisibleElements = [...runtimeDocument.querySelectorAll("[data-psl-role-visible]")];
+	const roleVisibleElements = [...runtimeDocument.querySelectorAll("[data-builder-role-visible]")];
 	roleVisibleElements.forEach((element) => {
 		element.hidden = true;
 	});
-	async function currentUserRoles() {
-		if (!roleVisibleElements.length) return new Set();
-		const session = await authSessionPromise;
-		if (!session) return new Set();
-		const source = runtimeConfig.dataSources?.find((candidate) => candidate.name === "user_roles" || candidate.type === "supabase" && candidate.table === "user_roles");
-		if (!source) return new Set();
-		if (source.type === "static") {
-			return new Set(source.records.flatMap((record) => typeof record.role === "string" ? [record.role] : []));
-		};
-		if (source.type !== "supabase") return new Set();
-		try {
-			const request = dataRequest(source, undefined, session);
-			if (!request) return new Set();
-			const response = await runtimeWindow.fetch(request.url, request.options);
-			if (!response.ok) return new Set();
-			const result = await response.json();
-			if (!Array.isArray(result)) return new Set();
-			return new Set(result.flatMap((record) => {
-				if (!record || typeof record !== "object") return [];
-				const role = record.role;
-				return typeof role === "string" ? [role] : [];
-			}));
-		} catch {
-			return new Set();
-		}
+	let userRolesPromise;
+	function currentUserRoles() {
+		if (userRolesPromise) return userRolesPromise;
+		userRolesPromise = (async () => {
+			const session = await authSessionPromise;
+			if (!session) return new Set();
+			const source = runtimeConfig.dataSources?.find((candidate) => /(^|_)roles?($|_)/i.test(candidate.name) || candidate.type === "supabase" && /(^|_)roles?($|_)/i.test(candidate.table));
+			if (!source) return new Set();
+			if (source.type === "static") {
+				return new Set(source.records.flatMap((record) => typeof record.role === "string" ? [record.role] : []));
+			};
+			if (source.type !== "supabase") return new Set();
+			try {
+				const request = dataRequest(source, undefined, session);
+				if (!request) return new Set();
+				const response = await runtimeWindow.fetch(request.url, request.options);
+				if (!response.ok) return new Set();
+				const result = await response.json();
+				if (!Array.isArray(result)) return new Set();
+				return new Set(result.flatMap((record) => {
+					if (!record || typeof record !== "object") return [];
+					const role = record.role;
+					return typeof role === "string" ? [role] : [];
+				}));
+			} catch {
+				return new Set();
+			}
+		})();
+		return userRolesPromise;
 	}
 	async function applyRoleVisibility() {
 		const roles = await currentUserRoles();
 		roleVisibleElements.forEach((element) => {
-			const expected = element.dataset.pslRoleVisible;
+			const expected = element.dataset.builderRoleVisible;
 			element.hidden = !expected || !roles.has(expected);
 		});
 	}
@@ -184,7 +188,7 @@
 	function navigateToPage(pageId, replace = false) {
 		if (runtimeConfig.transport === "message") {
 			const message = {
-				source: "psl-navigation-runtime",
+				source: "builder-navigation-runtime",
 				action: "navigate",
 				targetPage: pageId
 			};
@@ -210,6 +214,20 @@
 			saveReturnPage(runtimeConfig.currentPage);
 			navigateToPage(authentication.loginPage, true);
 			return false;
+		};
+		if (access === "role") {
+			if (!session) {
+				saveReturnPage(runtimeConfig.currentPage);
+				navigateToPage(authentication.loginPage, true);
+				return false;
+			};
+			const permittedRoles = runtimeConfig.pageRoles?.[runtimeConfig.currentPage] ?? [];
+			const userRoles = await currentUserRoles();
+			if (!permittedRoles.some((role) => userRoles.has(role))) {
+				runtimeDocument.body.innerHTML = "<main role=\"main\" style=\"max-width:36rem;margin:12vh auto;padding:2rem;font-family:system-ui,sans-serif\"><h1>Acceso restringido</h1><p>Tu cuenta no tiene un rol autorizado para ver esta página.</p></main>";
+				revealDocument();
+				return false;
+			}
 		};
 		if (access === "guestOnly" && session) {
 			const destination = storedReturnPage() ?? authentication.afterLoginPage;
@@ -360,10 +378,10 @@
 		}
 	}
 	async function applyRecordToRoot(root, contextKey, record) {
-		const candidates = [root, ...root.querySelectorAll("[data-psl-element-id]")];
+		const candidates = [root, ...root.querySelectorAll("[data-builder-element-id]")];
 		for (const binding of runtimeConfig.bindings ?? []) {
 			if (binding.pageId !== runtimeConfig.currentPage || binding.contextKey !== contextKey) continue;
-			const element = candidates.find((candidate) => candidate.dataset.pslElementId === binding.elementId);
+			const element = candidates.find((candidate) => candidate.dataset.builderElementId === binding.elementId);
 			const rawValue = fieldValue(record, binding.field) ?? binding.fallback;
 			if (element && rawValue !== undefined && rawValue !== null) {
 				await applyBinding(element, binding, String(rawValue));
@@ -373,19 +391,19 @@
 	async function applyRepeaters() {
 		for (const repeater of runtimeConfig.repeaters ?? []) {
 			if (repeater.pageId !== runtimeConfig.currentPage) continue;
-			const template = [...runtimeDocument.querySelectorAll("[data-psl-element-id]")].find((candidate) => candidate.dataset.pslElementId === repeater.elementId);
+			const template = [...runtimeDocument.querySelectorAll("[data-builder-element-id]")].find((candidate) => candidate.dataset.builderElementId === repeater.elementId);
 			if (!template) continue;
 			const pageSize = repeater.pageSize;
 			const usesPagination = Boolean(repeater.pagination && pageSize);
 			const repeaterHost = template.parentElement;
-			const anchor = runtimeDocument.createComment(`psl-repeater:${repeater.id}`);
+			const anchor = runtimeDocument.createComment(`builder-repeater:${repeater.id}`);
 			template.parentNode?.insertBefore(anchor, template);
 			template.remove();
 			Array.from(repeaterHost?.children ?? []).forEach((element) => {
-				if (element.getAttribute("data-psl-design-placeholder") === "true") element.remove();
+				if (element.getAttribute("data-builder-design-placeholder") === "true") element.remove();
 			});
 			const controls = runtimeDocument.createElement("nav");
-			controls.className = "psl-data-pagination";
+			controls.className = "builder-data-pagination";
 			controls.setAttribute("aria-label", "Páginas de información");
 			const previous = runtimeDocument.createElement("button");
 			previous.type = "button";
@@ -408,16 +426,16 @@
 					userFilterColumn: repeater.userFilterColumn,
 					includeUnpublished: repeater.includeUnpublished
 				});
-				runtimeDocument.querySelectorAll("[data-psl-repeater-instance]").forEach((element) => {
-					if (element.dataset.pslRepeaterInstance === repeater.id) element.remove();
+				runtimeDocument.querySelectorAll("[data-builder-repeater-instance]").forEach((element) => {
+					if (element.dataset.builderRepeaterInstance === repeater.id) element.remove();
 				});
 				const visibleRecords = pageSize ? records.slice(0, pageSize) : records;
 				const hasNextPage = Boolean(pageSize && records.length > pageSize);
 				if (!visibleRecords.length) {
 					const hasError = dataSourceErrors.has(repeater.dataSourceId);
 					const status = runtimeDocument.createElement("div");
-					status.dataset.pslRepeaterInstance = repeater.id;
-					status.dataset.pslDataStatus = hasError ? "error" : "empty";
+					status.dataset.builderRepeaterInstance = repeater.id;
+					status.dataset.builderDataStatus = hasError ? "error" : "empty";
 					status.setAttribute("role", hasError ? "alert" : "status");
 					status.textContent = hasError ? repeater.errorMessage ?? "No se pudo cargar esta información." : currentPage > 0 ? "No hay más elementos para mostrar." : repeater.emptyMessage ?? "Todavía no hay elementos para mostrar.";
 					status.style.cssText = "grid-column:1/-1;padding:1rem;text-align:center;opacity:.8;border:1px dashed currentColor;border-radius:.5rem";
@@ -428,9 +446,9 @@
 						const recordId = record.id;
 						if (typeof recordId !== "string" && typeof recordId !== "number") continue;
 						const clone = template.cloneNode(true);
-						clone.dataset.pslRepeaterInstance = repeater.id;
-						clone.dataset.pslRecordId = String(recordId);
-						clone.dataset.pslDataSourceId = repeater.dataSourceId;
+						clone.dataset.builderRepeaterInstance = repeater.id;
+						clone.dataset.builderRecordId = String(recordId);
+						clone.dataset.builderDataSourceId = repeater.dataSourceId;
 						await applyRecordToRoot(clone, repeater.itemContext, record);
 						anchor.parentNode?.insertBefore(clone, anchor);
 					}
@@ -444,7 +462,7 @@
 						repeaterHost.parentNode.insertBefore(controls, repeaterHost.nextSibling);
 					}
 				};
-				if (repeaterHost?.classList.contains("psl-data-carousel")) {
+				if (repeaterHost?.classList.contains("builder-data-carousel")) {
 					repeaterHost.scrollLeft = 0;
 				}
 			};
@@ -480,12 +498,12 @@
 			if (binding.dataSourceId) applyMutationFormRecord(binding.dataSourceId, record);
 			const rawValue = fieldValue(record, binding.field) ?? binding.fallback;
 			if (rawValue === undefined || rawValue === null) continue;
-			const element = [...runtimeDocument.querySelectorAll("[data-psl-element-id]")].find((candidate) => candidate.dataset.pslElementId === binding.elementId);
+			const element = [...runtimeDocument.querySelectorAll("[data-builder-element-id]")].find((candidate) => candidate.dataset.builderElementId === binding.elementId);
 			if (element) await applyBinding(element, binding, String(rawValue));
 		}
 	}
 	function setAuthStatus(root, message, isError = false) {
-		const status = root.querySelector("[data-psl-auth-status]");
+		const status = root.querySelector("[data-builder-auth-status]");
 		if (!status) return;
 		status.textContent = message;
 		status.setAttribute("role", isError ? "alert" : "status");
@@ -494,7 +512,7 @@
 	const mutationDisposers = [];
 	const wizardDisposers = [];
 	function setMutationStatus(root, message, isError = false) {
-		const status = root.querySelector("[data-psl-mutation-status]");
+		const status = root.querySelector("[data-builder-mutation-status]");
 		if (!status) return;
 		status.textContent = message;
 		status.setAttribute("role", isError ? "alert" : "status");
@@ -597,16 +615,16 @@
 		if (!record || typeof record !== "object") return;
 		const source = runtimeConfig.dataSources?.find((candidate) => candidate.id === dataSourceId);
 		if (!source) return;
-		runtimeDocument.querySelectorAll("form[data-psl-mutation-source]").forEach((form) => {
-			const sourceKey = form.dataset.pslMutationSource;
+		runtimeDocument.querySelectorAll("form[data-builder-mutation-source]").forEach((form) => {
+			const sourceKey = form.dataset.builderMutationSource;
 			const matches = source.id === sourceKey || source.name === sourceKey || source.type === "supabase" && source.table === sourceKey;
 			if (!matches) return;
-			form.querySelectorAll("[data-psl-mutation-field][name]").forEach((field) => {
+			form.querySelectorAll("[data-builder-mutation-field][name]").forEach((field) => {
 				const value = fieldValue(record, field.name);
 				if (value === undefined || value === null) return;
 				if (field instanceof HTMLInputElement && field.type === "checkbox") {
 					field.checked = Boolean(value);
-				} else if (field.dataset.pslMutationType === "json" && typeof value === "object") {
+				} else if (field.dataset.builderMutationType === "json" && typeof value === "object") {
 					field.value = JSON.stringify(value);
 				} else {
 					field.value = String(value);
@@ -623,38 +641,38 @@
 	async function applySourceRecord(dataSourceId, record) {
 		if (!record || typeof record !== "object") return;
 		applyMutationFormRecord(dataSourceId, record);
-		const elements = [...runtimeDocument.querySelectorAll("[data-psl-element-id]")];
+		const elements = [...runtimeDocument.querySelectorAll("[data-builder-element-id]")];
 		for (const binding of runtimeConfig.bindings ?? []) {
 			if (binding.pageId !== runtimeConfig.currentPage || binding.dataSourceId !== dataSourceId) continue;
 			const rawValue = fieldValue(record, binding.field) ?? binding.fallback;
 			if (rawValue === undefined || rawValue === null) continue;
-			const element = elements.find((candidate) => candidate.dataset.pslElementId === binding.elementId);
+			const element = elements.find((candidate) => candidate.dataset.builderElementId === binding.elementId);
 			if (element) await applyBinding(element, binding, String(rawValue));
 		}
 	}
 	function installDataMutations() {
-		runtimeDocument.querySelectorAll("form[data-psl-mutation-source]").forEach((form) => {
-			const formContextKey = form.dataset.pslMutationContext ?? "record";
-			const editingContext = form.dataset.pslMutationMode === "context" ? activeContext[formContextKey] : undefined;
+		runtimeDocument.querySelectorAll("form[data-builder-mutation-source]").forEach((form) => {
+			const formContextKey = form.dataset.builderMutationContext ?? "record";
+			const editingContext = form.dataset.builderMutationMode === "context" ? activeContext[formContextKey] : undefined;
 			if (editingContext) {
-				const mode = runtimeDocument.querySelector("[data-psl-editor-mode]");
-				const title = runtimeDocument.querySelector("[data-psl-editor-title]");
-				const description = runtimeDocument.querySelector("[data-psl-editor-description]");
+				const mode = runtimeDocument.querySelector("[data-builder-editor-mode]");
+				const title = runtimeDocument.querySelector("[data-builder-editor-title]");
+				const description = runtimeDocument.querySelector("[data-builder-editor-description]");
 				if (mode) mode.textContent = "Editar";
 				if (title) title.textContent = "Editar práctica";
 				if (description) description.textContent = "Actualiza la información o la referencia de movimiento.";
 			};
 			const submit = async (event) => {
 				event.preventDefault();
-				const sourceKey = form.dataset.pslMutationSource;
+				const sourceKey = form.dataset.builderMutationSource;
 				const source = runtimeConfig.dataSources?.find((candidate) => candidate.id === sourceKey || candidate.name === sourceKey || candidate.type === "supabase" && candidate.table === sourceKey);
 				if (!source || source.type !== "supabase") {
 					setMutationStatus(form, "No se encontró la colección para guardar el perfil.", true);
 					return;
 				};
-				const filterField = form.dataset.pslMutationFilter;
-				const requestedMode = form.dataset.pslMutationMode;
-				const contextKey = form.dataset.pslMutationContext ?? "record";
+				const filterField = form.dataset.builderMutationFilter;
+				const requestedMode = form.dataset.builderMutationMode;
+				const contextKey = form.dataset.builderMutationContext ?? "record";
 				const contextRecord = activeContext[contextKey];
 				const mutationMode = requestedMode === "insert" || requestedMode === "context" && !contextRecord ? "insert" : "update";
 				const session = await authSessionPromise;
@@ -669,13 +687,13 @@
 					setMutationStatus(form, "Graba y detén la referencia de movimiento antes de guardar.", true);
 					return;
 				};
-				const fields = [...form.querySelectorAll("[data-psl-mutation-field][name]")];
+				const fields = [...form.querySelectorAll("[data-builder-mutation-field][name]")];
 				const parseValue = (field) => {
 					const value = field.value.trim();
 					if (!value) return null;
-					if (field.dataset.pslMutationType === "json") return JSON.parse(value);
-					if (field.dataset.pslMutationType === "boolean") return value === "true";
-					if (field.dataset.pslMutationType === "number" || field instanceof HTMLInputElement && field.type === "number") return Number(value);
+					if (field.dataset.builderMutationType === "json") return JSON.parse(value);
+					if (field.dataset.builderMutationType === "boolean") return value === "true";
+					if (field.dataset.builderMutationType === "number" || field instanceof HTMLInputElement && field.type === "number") return Number(value);
 					return value;
 				};
 				const values = Object.fromEntries(fields.flatMap((field) => {
@@ -684,9 +702,9 @@
 				}));
 				const submitter = event instanceof SubmitEvent ? event.submitter : null;
 				if (submitter?.name) {
-					values[submitter.name] = submitter.dataset.pslMutationType === "boolean" ? submitter.value === "true" : submitter.value;
+					values[submitter.name] = submitter.dataset.builderMutationType === "boolean" ? submitter.value === "true" : submitter.value;
 				};
-				const ownerField = form.dataset.pslMutationOwnerField;
+				const ownerField = form.dataset.builderMutationOwnerField;
 				if (mutationMode === "insert" && ownerField) values[ownerField] = userId;
 				const videoInput = runtimeDocument.querySelector("[data-motion-file]");
 				const selectedVideo = videoInput?.files?.[0];
@@ -701,7 +719,7 @@
 				};
 				const submitButton = form.querySelector("button[type=\"submit\"]");
 				if (submitButton) submitButton.disabled = true;
-				setMutationStatus(form, form.dataset.pslMutationPending ?? (mutationMode === "insert" ? "Guardando práctica…" : "Guardando perfil…"));
+				setMutationStatus(form, form.dataset.builderMutationPending ?? (mutationMode === "insert" ? "Guardando práctica…" : "Guardando perfil…"));
 				try {
 					const url = new URL(`${source.projectUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(source.table)}`);
 					if (mutationMode === "update" && filterField) {
@@ -738,7 +756,7 @@
 						updated = await updatePracticeMediaUrl(source, session, practiceId, mediaUrl);
 					};
 					await applySourceRecord(source.id, updated);
-					setMutationStatus(form, form.dataset.pslMutationSuccess ?? (mutationMode === "insert" ? "Práctica guardada correctamente." : "Perfil guardado correctamente."));
+					setMutationStatus(form, form.dataset.builderMutationSuccess ?? (mutationMode === "insert" ? "Práctica guardada correctamente." : "Perfil guardado correctamente."));
 				} catch (error) {
 					setMutationStatus(form, error instanceof Error ? error.message : mutationMode === "insert" ? "No se pudo guardar la práctica." : "No se pudo guardar el perfil.", true);
 				} finally {
@@ -750,27 +768,27 @@
 		});
 	}
 	function installAuthControls() {
-		runtimeDocument.querySelectorAll("[data-psl-auth-tab]").forEach((tab) => {
+		runtimeDocument.querySelectorAll("[data-builder-auth-tab]").forEach((tab) => {
 			const selectTab = (event) => {
 				event.preventDefault();
-				const selected = tab.dataset.pslAuthTab;
-				const root = tab.closest("[data-psl-auth-visible=\"signed-out\"]") ?? runtimeDocument;
-				root.querySelectorAll("[data-psl-auth-tab]").forEach((candidate) => {
-					const active = candidate.dataset.pslAuthTab === selected;
+				const selected = tab.dataset.builderAuthTab;
+				const root = tab.closest("[data-builder-auth-visible=\"signed-out\"]") ?? runtimeDocument;
+				root.querySelectorAll("[data-builder-auth-tab]").forEach((candidate) => {
+					const active = candidate.dataset.builderAuthTab === selected;
 					candidate.setAttribute("aria-selected", String(active));
 					candidate.setAttribute("tabindex", active ? "0" : "-1");
 				});
-				root.querySelectorAll("[data-psl-auth-panel]").forEach((panel) => {
-					panel.hidden = panel.dataset.pslAuthPanel !== selected;
+				root.querySelectorAll("[data-builder-auth-panel]").forEach((panel) => {
+					panel.hidden = panel.dataset.builderAuthPanel !== selected;
 				});
 			};
 			tab.addEventListener("click", selectTab);
 			authDisposers.push(() => tab.removeEventListener("click", selectTab));
 		});
-		runtimeDocument.querySelectorAll("form[data-psl-auth-action]").forEach((form) => {
+		runtimeDocument.querySelectorAll("form[data-builder-auth-action]").forEach((form) => {
 			const submit = async (event) => {
 				event.preventDefault();
-				const action = form.dataset.pslAuthAction;
+				const action = form.dataset.builderAuthAction;
 				if (action !== "login" && action !== "signup") return;
 				const data = new FormData(form);
 				const email = String(data.get("email") ?? "").trim();
@@ -781,7 +799,7 @@
 				};
 				setAuthStatus(form, action === "login" ? "Iniciando sesión…" : "Creando cuenta…");
 				try {
-					const metadata = Object.fromEntries([...form.querySelectorAll("[data-psl-auth-metadata][name]")].flatMap((field) => {
+					const metadata = Object.fromEntries([...form.querySelectorAll("[data-builder-auth-metadata][name]")].flatMap((field) => {
 						if (field instanceof HTMLInputElement && (field.type === "radio" || field.type === "checkbox") && !field.checked) return [];
 						const value = field.value.trim();
 						return field.name && value ? [[field.name, value]] : [];
@@ -797,7 +815,7 @@
 						return;
 					};
 					saveSession(session);
-					const destination = storedReturnPage() ?? runtimeConfig.authentication?.afterLoginPage;
+					const destination = form.getAttribute((0,__vite_ssr_import_0__.AUTH_DESTINATION_ATTRIBUTE))?.trim() || storedReturnPage() || runtimeConfig.authentication?.afterLoginPage;
 					saveReturnPage();
 					if (destination) navigateToPage(destination, true);
 					else runtimeWindow.location.reload();
@@ -808,7 +826,7 @@
 			form.addEventListener("submit", submit);
 			authDisposers.push(() => form.removeEventListener("submit", submit));
 		});
-		runtimeDocument.querySelectorAll("[data-psl-auth-action=\"logout\"]").forEach((button) => {
+		runtimeDocument.querySelectorAll("[data-builder-auth-action=\"logout\"]").forEach((button) => {
 			const logout = async (event) => {
 				event.preventDefault();
 				const session = await authSessionPromise;
@@ -817,7 +835,7 @@
 				} catch {};
 				saveSession();
 				saveReturnPage();
-				const destination = runtimeConfig.authentication?.afterLogoutPage;
+				const destination = button.getAttribute((0,__vite_ssr_import_0__.AUTH_DESTINATION_ATTRIBUTE))?.trim() || runtimeConfig.authentication?.afterLogoutPage;
 				if (destination) navigateToPage(destination, true);
 				else runtimeWindow.location.reload();
 			};
@@ -825,12 +843,12 @@
 			authDisposers.push(() => button.removeEventListener("click", logout));
 		});
 		void authSessionPromise.then((session) => {
-			runtimeDocument.querySelectorAll("[data-psl-auth-visible]").forEach((element) => {
-				const expected = element.dataset.pslAuthVisible;
+			runtimeDocument.querySelectorAll("[data-builder-auth-visible]").forEach((element) => {
+				const expected = element.dataset.builderAuthVisible;
 				element.hidden = expected === "signed-in" ? !session : Boolean(session);
 			});
-			runtimeDocument.querySelectorAll("[data-psl-auth-field]").forEach((element) => {
-				const field = element.dataset.pslAuthField;
+			runtimeDocument.querySelectorAll("[data-builder-auth-field]").forEach((element) => {
+				const field = element.dataset.builderAuthField;
 				const value = field && session?.user ? fieldValue(session.user, field) : undefined;
 				if (value !== undefined && value !== null) element.textContent = String(value);
 			});
@@ -839,18 +857,120 @@
 	function resolvedConnectionContext(connection, sourceElement) {
 		return Object.fromEntries(Object.entries(connection.context ?? {}).flatMap(([key, value]) => {
 			if (value.recordId !== "$record.id") return [[key, value]];
-			const recordRoot = sourceElement?.closest("[data-psl-record-id]");
-			const recordId = recordRoot?.dataset.pslRecordId;
-			const dataSourceId = recordRoot?.dataset.pslDataSourceId ?? value.dataSourceId;
+			const recordRoot = sourceElement?.closest("[data-builder-record-id]");
+			const recordId = recordRoot?.dataset.builderRecordId;
+			const dataSourceId = recordRoot?.dataset.builderDataSourceId ?? value.dataSourceId;
 			return recordId ? [[key, {
 				dataSourceId,
 				recordId
 			}]] : [];
 		}));
 	}
+	function recordToggleRecordId(toggle, sourceElement) {
+		const repeatedRecord = sourceElement?.closest("[data-builder-record-id]")?.dataset.builderRecordId;
+		return repeatedRecord ?? activeContext[toggle.contextKey]?.recordId;
+	}
+	function recordToggleElement(toggle) {
+		return [...runtimeDocument.querySelectorAll("[data-builder-element-id]")].find((candidate) => candidate.dataset.builderElementId === toggle.elementId);
+	}
+	function setRecordToggleState(element, toggle, active) {
+		element.textContent = active ? toggle.activeLabel : toggle.inactiveLabel;
+		element.setAttribute("aria-pressed", String(active));
+		element.dataset.builderRecordToggleState = active ? "active" : "inactive";
+		element.removeAttribute("title");
+	}
+	async function recordToggleState(toggle, sourceElement) {
+		const source = runtimeConfig.dataSources?.find((candidate) => candidate.id === toggle.dataSourceId);
+		const session = await authSessionPromise;
+		const userId = session?.user?.id;
+		const recordId = recordToggleRecordId(toggle, sourceElement);
+		if (!source || source.type !== "supabase" || !session || typeof userId !== "string" || !recordId) {
+			return undefined;
+		};
+		const url = new URL(`${source.projectUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(source.table)}`);
+		url.searchParams.set("select", "id");
+		url.searchParams.set(toggle.ownerField, `eq.${userId}`);
+		url.searchParams.set(toggle.recordField, `eq.${recordId}`);
+		url.searchParams.set("limit", "1");
+		const response = await runtimeWindow.fetch(url.href, { headers: {
+			apikey: source.publishableKey,
+			Authorization: `Bearer ${session.access_token}`
+		} });
+		if (!response.ok) throw new Error("No se pudo comprobar si este elemento está guardado.");
+		const rows = await response.json();
+		return Array.isArray(rows) && rows.length > 0;
+	}
+	async function executeRecordToggle(toggle, sourceElement) {
+		const source = runtimeConfig.dataSources?.find((candidate) => candidate.id === toggle.dataSourceId);
+		const session = await authSessionPromise;
+		const userId = session?.user?.id;
+		const recordId = recordToggleRecordId(toggle, sourceElement);
+		if (!source || source.type !== "supabase") {
+			sourceElement.title = "La colección para guardar no está disponible.";
+			return;
+		};
+		if (!session || typeof userId !== "string") {
+			sourceElement.title = "Inicia sesión para guardar este elemento.";
+			return;
+		};
+		if (!recordId) {
+			sourceElement.title = "Abre un registro antes de guardarlo.";
+			return;
+		};
+		sourceElement.setAttribute("aria-busy", "true");
+		sourceElement.setAttribute("disabled", "");
+		try {
+			const active = await recordToggleState(toggle, sourceElement);
+			const url = new URL(`${source.projectUrl.replace(/\/$/, "")}/rest/v1/${encodeURIComponent(source.table)}`);
+			const headers = {
+				apikey: source.publishableKey,
+				Authorization: `Bearer ${session.access_token}`,
+				"Content-Type": "application/json",
+				Prefer: "return=minimal"
+			};
+			let response;
+			if (active) {
+				url.searchParams.set(toggle.ownerField, `eq.${userId}`);
+				url.searchParams.set(toggle.recordField, `eq.${recordId}`);
+				response = await runtimeWindow.fetch(url.href, {
+					method: "DELETE",
+					headers
+				});
+			} else {
+				response = await runtimeWindow.fetch(url.href, {
+					method: "POST",
+					headers,
+					body: JSON.stringify({
+						[toggle.ownerField]: userId,
+						[toggle.recordField]: recordId
+					})
+				});
+			};
+			if (!response.ok) throw new Error(active ? "No se pudo quitar de tus guardados." : "No se pudo guardar este elemento.");
+			setRecordToggleState(sourceElement, toggle, !active);
+		} catch (cause) {
+			sourceElement.title = cause instanceof Error ? cause.message : "No se pudo actualizar.";
+		} finally {
+			sourceElement.removeAttribute("aria-busy");
+			sourceElement.removeAttribute("disabled");
+		}
+	}
+	async function initializeRecordToggles() {
+		for (const toggle of runtimeConfig.recordToggles ?? []) {
+			if (toggle.pageId !== runtimeConfig.currentPage) continue;
+			const element = recordToggleElement(toggle);
+			if (!element) continue;
+			try {
+				const active = await recordToggleState(toggle, element);
+				if (active !== undefined) setRecordToggleState(element, toggle, active);
+			} catch (cause) {
+				element.title = cause instanceof Error ? cause.message : "No se pudo comprobar este elemento.";
+			}
+		}
+	}
 	function sendMessage(connection, context) {
 		const message = {
-			source: "psl-navigation-runtime",
+			source: "builder-navigation-runtime",
 			action: connection.action,
 			...connection.targetPage ? { targetPage: connection.targetPage } : {},
 			...connection.url ? { url: connection.url } : {},
@@ -892,23 +1012,29 @@
 		const eventTarget = event.target;
 		let element = eventTarget && typeof eventTarget.getAttribute === "function" ? eventTarget : null;
 		let connection;
+		let recordToggle;
 		while (element && element !== runtimeDocument.body) {
-			const elementId = element.getAttribute("data-psl-element-id");
+			const elementId = element.getAttribute("data-builder-element-id");
 			connection = runtimeConfig.connections.find((candidate) => candidate.sourcePage === runtimeConfig.currentPage && candidate.elementId === elementId && candidate.event === "click");
-			if (connection) break;
+			recordToggle = runtimeConfig.recordToggles?.find((candidate) => candidate.pageId === runtimeConfig.currentPage && candidate.elementId === elementId);
+			if (connection || recordToggle) break;
 			element = element.parentElement;
 		};
-		if (!connection) return;
+		if (!connection && !recordToggle) return;
 		event.preventDefault();
 		event.stopPropagation();
-		execute(connection, element);
+		if (recordToggle && element instanceof HTMLElement) {
+			void executeRecordToggle(recordToggle, element);
+			return;
+		};
+		if (connection) execute(connection, element);
 	}
 	runtimeDocument.addEventListener("click", handleClick, true);
 	installAuthControls();
 	installPracticeWizards();
 	installDataMutations();
 	void applyAuthPageGuard().then((allowed) => {
-		if (allowed) return applyRoleVisibility().then(() => applyRepeaters()).then(() => applyDataBindings());
+		if (allowed) return applyRoleVisibility().then(() => applyRepeaters()).then(() => applyDataBindings()).then(() => initializeRecordToggles());
 		return undefined;
 	});
 	return () => {
