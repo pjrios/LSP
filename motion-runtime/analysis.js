@@ -437,7 +437,14 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 	const detectors = new Map();
 	let mediaPipeTimestamp = 0;
 	function activityFeatures(activity) {
-		if (activity.detector.task === "holistic-landmarker") return activity.detector.landmarks;
+		if (activity.detector.task === "holistic-landmarker") {
+			const selection = activity.detector.landmarks;
+			return {
+				hands: selection?.hands !== false,
+				pose: selection?.pose !== false,
+				face: selection?.face === true
+			};
+		}
 		return {
 			hands: activity.detector.task === "hand-landmarker" || activity.detector.task === "gesture-recognizer",
 			pose: activity.detector.task === "pose-landmarker",
