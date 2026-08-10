@@ -949,6 +949,19 @@
       "includeUnpublished": true
     }
   ],
+  "recordToggles": [
+    {
+      "id": "detalle-record-toggle-1",
+      "pageId": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/button:1",
+      "dataSourceId": "supabase-table_favorite_practices",
+      "contextKey": "record",
+      "ownerField": "user_id",
+      "recordField": "practice_id",
+      "activeLabel": "★ Guardado",
+      "inactiveLabel": "☆ Guardar"
+    }
+  ],
   "motionActivities": [
     {
       "id": "detalle-motion-1",
@@ -969,17 +982,33 @@
         "videoField": "media_url",
         "templateField": "mediapipe_reference"
       },
-      "features": {
-        "hands": true,
-        "pose": true,
-        "face": false
+      "presentation": {
+        "referenceDisplay": "video-reference",
+        "showResults": false
+      },
+      "detector": {
+        "provider": "mediapipe",
+        "task": "holistic-landmarker",
+        "modelUrl": "https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task",
+        "delegate": "auto",
+        "minConfidence": 0.5,
+        "landmarks": {
+          "hands": true,
+          "pose": true,
+          "face": false
+        }
+      },
+      "evaluator": {
+        "type": "sequence",
+        "passingScore": 75
       },
       "processing": {
         "checkpointReduction": true,
-        "minConfidence": 0.5,
         "smoothing": 3
       },
-      "passingScore": 75,
+      "referenceOutput": {
+        "type": "download"
+      },
       "persistence": {
         "dataSourceId": "supabase-table_practice_attempts",
         "contextKey": "record",
@@ -1004,17 +1033,34 @@
       "reference": {
         "type": "none"
       },
-      "features": {
-        "hands": true,
-        "pose": true,
-        "face": true
+      "presentation": {
+        "referenceDisplay": "video-reference",
+        "showResults": false
+      },
+      "detector": {
+        "provider": "mediapipe",
+        "task": "holistic-landmarker",
+        "modelUrl": "https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task",
+        "delegate": "auto",
+        "minConfidence": 0.5,
+        "landmarks": {
+          "hands": true,
+          "pose": true,
+          "face": true
+        }
+      },
+      "evaluator": {
+        "type": "sequence",
+        "passingScore": 75
       },
       "processing": {
         "checkpointReduction": true,
-        "minConfidence": 0.5,
         "smoothing": 3
       },
-      "passingScore": 75
+      "referenceOutput": {
+        "type": "form",
+        "selector": "[data-motion-template-field]"
+      }
     }
   ]
 }
