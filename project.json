@@ -34,18 +34,6 @@
       "file": "pages/resultados.html"
     },
     {
-      "id": "progreso",
-      "name": "Progreso",
-      "access": "authenticated",
-      "file": "pages/progreso.html"
-    },
-    {
-      "id": "perfil",
-      "name": "Perfil",
-      "access": "authenticated",
-      "file": "pages/perfil.html"
-    },
-    {
       "id": "gestion",
       "name": "Crear",
       "access": "authenticated",
@@ -84,36 +72,12 @@
       "targetPage": "catalogo"
     },
     {
-      "id": "inicio-flow-4",
-      "sourcePage": "inicio",
-      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "inicio-flow-5",
-      "sourcePage": "inicio",
-      "elementId": "inicio::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
       "id": "inicio-flow-6",
       "sourcePage": "inicio",
       "elementId": "inicio::div:1/div:1/header:1/nav:1/button:5",
       "event": "click",
       "action": "navigate",
       "targetPage": "gestion"
-    },
-    {
-      "id": "inicio-flow-7",
-      "sourcePage": "inicio",
-      "elementId": "inicio::div:1/main:1/section:2/div:2/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
     },
     {
       "id": "inicio-flow-8",
@@ -146,22 +110,6 @@
       "event": "click",
       "action": "navigate",
       "targetPage": "catalogo"
-    },
-    {
-      "id": "catalogo-flow-4",
-      "sourcePage": "catalogo",
-      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "catalogo-flow-5",
-      "sourcePage": "catalogo",
-      "elementId": "catalogo::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
     },
     {
       "id": "catalogo-flow-6",
@@ -224,28 +172,20 @@
       "targetPage": "catalogo"
     },
     {
-      "id": "detalle-flow-4",
-      "sourcePage": "detalle",
-      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "detalle-flow-5",
-      "sourcePage": "detalle",
-      "elementId": "detalle::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
       "id": "detalle-flow-6",
       "sourcePage": "detalle",
       "elementId": "detalle::div:1/div:1/header:1/nav:1/button:5",
       "event": "click",
       "action": "navigate",
       "targetPage": "gestion"
+    },
+    {
+      "id": "detalle-flow-7",
+      "sourcePage": "detalle",
+      "elementId": "detalle::div:1/main:1/header:1/button:1",
+      "event": "click",
+      "action": "navigate",
+      "targetPage": "catalogo"
     },
     {
       "id": "resultados-flow-1",
@@ -272,153 +212,9 @@
       "targetPage": "catalogo"
     },
     {
-      "id": "resultados-flow-4",
-      "sourcePage": "resultados",
-      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "resultados-flow-5",
-      "sourcePage": "resultados",
-      "elementId": "resultados::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
       "id": "resultados-flow-6",
       "sourcePage": "resultados",
       "elementId": "resultados::div:1/div:1/header:1/nav:1/button:5",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "gestion"
-    },
-    {
-      "id": "resultados-flow-7",
-      "sourcePage": "resultados",
-      "elementId": "resultados::div:1/main:1/div:2/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "detalle"
-    },
-    {
-      "id": "resultados-flow-8",
-      "sourcePage": "resultados",
-      "elementId": "resultados::div:1/main:1/div:2/button:2",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "catalogo"
-    },
-    {
-      "id": "resultados-flow-9",
-      "sourcePage": "resultados",
-      "elementId": "resultados::div:1/main:1/div:2/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "progreso-flow-1",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "inicio"
-    },
-    {
-      "id": "progreso-flow-2",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "inicio"
-    },
-    {
-      "id": "progreso-flow-3",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:2",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "catalogo"
-    },
-    {
-      "id": "progreso-flow-4",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "progreso-flow-5",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
-      "id": "progreso-flow-6",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/div:1/header:1/nav:1/button:5",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "gestion"
-    },
-    {
-      "id": "progreso-flow-7",
-      "sourcePage": "progreso",
-      "elementId": "progreso::div:1/main:1/div:1/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "catalogo"
-    },
-    {
-      "id": "perfil-flow-1",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "inicio"
-    },
-    {
-      "id": "perfil-flow-2",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:1",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "inicio"
-    },
-    {
-      "id": "perfil-flow-3",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:2",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "catalogo"
-    },
-    {
-      "id": "perfil-flow-4",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "perfil-flow-5",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
-      "id": "perfil-flow-6",
-      "sourcePage": "perfil",
-      "elementId": "perfil::div:1/div:1/header:1/nav:1/button:5",
       "event": "click",
       "action": "navigate",
       "targetPage": "gestion"
@@ -448,22 +244,6 @@
       "targetPage": "catalogo"
     },
     {
-      "id": "gestion-flow-4",
-      "sourcePage": "gestion",
-      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "gestion-flow-5",
-      "sourcePage": "gestion",
-      "elementId": "gestion::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
       "id": "gestion-flow-6",
       "sourcePage": "gestion",
       "elementId": "gestion::div:1/div:1/header:1/nav:1/button:5",
@@ -477,7 +257,8 @@
       "elementId": "gestion::div:1/main:1/section:1/button:1",
       "event": "click",
       "action": "navigate",
-      "targetPage": "editor-practica"
+      "targetPage": "editor-practica",
+      "clearContext": true
     },
     {
       "id": "gestion-flow-8",
@@ -518,28 +299,13 @@
       "targetPage": "catalogo"
     },
     {
-      "id": "editor-practica-flow-4",
-      "sourcePage": "editor-practica",
-      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:3",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "progreso"
-    },
-    {
-      "id": "editor-practica-flow-5",
-      "sourcePage": "editor-practica",
-      "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:4",
-      "event": "click",
-      "action": "navigate",
-      "targetPage": "perfil"
-    },
-    {
       "id": "editor-practica-flow-6",
       "sourcePage": "editor-practica",
       "elementId": "editor-practica::div:1/div:1/header:1/nav:1/button:5",
       "event": "click",
       "action": "navigate",
-      "targetPage": "gestion"
+      "targetPage": "gestion",
+      "clearContext": true
     }
   ],
   "elementOverrides": [],
@@ -552,26 +318,6 @@
     "afterLogoutPage": "bienvenida"
   },
   "dataSources": [
-    {
-      "id": "supabase-table_profiles",
-      "name": "profiles",
-      "type": "supabase",
-      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
-      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
-      "table": "profiles",
-      "publishedOnly": false,
-      "requiresAuth": true
-    },
-    {
-      "id": "supabase-table_user_roles",
-      "name": "user_roles",
-      "type": "supabase",
-      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
-      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
-      "table": "user_roles",
-      "publishedOnly": false,
-      "requiresAuth": true
-    },
     {
       "id": "supabase-table_practices",
       "name": "practices",
@@ -595,43 +341,9 @@
       "requiresAuth": true,
       "orderColumn": "created_at",
       "orderDirection": "desc"
-    },
-    {
-      "id": "supabase-table_practice_progress",
-      "name": "practice_progress",
-      "type": "supabase",
-      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
-      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
-      "table": "practice_progress",
-      "publishedOnly": false,
-      "requiresAuth": true,
-      "orderColumn": "last_practiced_at",
-      "orderDirection": "desc"
-    },
-    {
-      "id": "supabase-table_favorite_practices",
-      "name": "favorite_practices",
-      "type": "supabase",
-      "projectUrl": "https://bkvwfmofndkxdhfgtevb.supabase.co",
-      "publishableKey": "sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK",
-      "table": "favorite_practices",
-      "publishedOnly": false,
-      "requiresAuth": true,
-      "orderColumn": "created_at",
-      "orderDirection": "desc"
     }
   ],
   "bindings": [
-    {
-      "id": "inicio-binding-1",
-      "pageId": "inicio",
-      "elementId": "inicio::div:1/main:1/section:1/h1:1/span:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_profiles",
-      "sourceMode": "first",
-      "field": "display_name"
-    },
     {
       "id": "inicio-binding-2",
       "pageId": "inicio",
@@ -705,26 +417,6 @@
     {
       "id": "detalle-binding-1",
       "pageId": "detalle",
-      "elementId": "detalle::div:1/main:1/header:1/div:1/span:1/span:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practices",
-      "sourceMode": "context",
-      "field": "difficulty"
-    },
-    {
-      "id": "detalle-binding-2",
-      "pageId": "detalle",
-      "elementId": "detalle::div:1/main:1/header:1/div:1/span:1/span:2",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practices",
-      "sourceMode": "context",
-      "field": "estimated_minutes"
-    },
-    {
-      "id": "detalle-binding-3",
-      "pageId": "detalle",
       "elementId": "detalle::div:1/main:1/header:1/div:1/h1:1",
       "target": "text",
       "contextKey": "record",
@@ -733,9 +425,9 @@
       "field": "title"
     },
     {
-      "id": "detalle-binding-4",
+      "id": "detalle-binding-2",
       "pageId": "detalle",
-      "elementId": "detalle::div:1/main:1/header:1/div:1/p:1",
+      "elementId": "detalle::div:1/main:1/header:1/div:1/p:2",
       "target": "text",
       "contextKey": "record",
       "dataSourceId": "supabase-table_practices",
@@ -743,49 +435,9 @@
       "field": "description"
     },
     {
-      "id": "progreso-binding-1",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:1/p:1/span:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practice_progress",
-      "sourceMode": "context",
-      "field": "status"
-    },
-    {
-      "id": "progreso-binding-2",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:1/small:1/span:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practice_progress",
-      "sourceMode": "context",
-      "field": "last_practiced_at"
-    },
-    {
-      "id": "progreso-binding-3",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:1/b:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practice_progress",
-      "sourceMode": "context",
-      "field": "best_score"
-    },
-    {
-      "id": "progreso-binding-4",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:2/b:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practice_progress",
-      "sourceMode": "context",
-      "field": "attempts_count"
-    },
-    {
-      "id": "progreso-binding-5",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:1/small:1/span:1",
+      "id": "resultados-binding-2",
+      "pageId": "resultados",
+      "elementId": "resultados::div:1/main:1/section:1/div:1/article:1/div:1/small:1/span:1",
       "target": "text",
       "contextKey": "record",
       "dataSourceId": "supabase-table_practice_attempts",
@@ -793,44 +445,14 @@
       "field": "created_at"
     },
     {
-      "id": "progreso-binding-6",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:1/b:1",
+      "id": "resultados-binding-3",
+      "pageId": "resultados",
+      "elementId": "resultados::div:1/main:1/section:1/div:1/article:1/div:2/strong:1/span:1",
       "target": "text",
       "contextKey": "record",
       "dataSourceId": "supabase-table_practice_attempts",
       "sourceMode": "context",
       "field": "score"
-    },
-    {
-      "id": "progreso-binding-7",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:2/span:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_practice_attempts",
-      "sourceMode": "context",
-      "field": "duration_seconds"
-    },
-    {
-      "id": "perfil-binding-1",
-      "pageId": "perfil",
-      "elementId": "perfil::div:1/main:1/section:1/div:2/h1:1",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_profiles",
-      "sourceMode": "first",
-      "field": "display_name"
-    },
-    {
-      "id": "perfil-binding-2",
-      "pageId": "perfil",
-      "elementId": "perfil::div:1/main:1/section:1/div:2/p:2",
-      "target": "text",
-      "contextKey": "record",
-      "dataSourceId": "supabase-table_profiles",
-      "sourceMode": "first",
-      "field": "bio"
     },
     {
       "id": "gestion-binding-1",
@@ -916,24 +538,14 @@
       "errorMessage": "No pudimos cargar las prácticas. Intenta nuevamente."
     },
     {
-      "id": "progreso-repeater-1",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:2/div:1/article:1",
-      "dataSourceId": "supabase-table_practice_progress",
-      "itemContext": "record",
-      "pageSize": 6,
-      "emptyMessage": "Todavía no has comenzado una práctica.",
-      "errorMessage": "No pudimos cargar tu progreso. Intenta nuevamente."
-    },
-    {
-      "id": "progreso-repeater-2",
-      "pageId": "progreso",
-      "elementId": "progreso::div:1/main:1/section:3/div:1/article:1",
+      "id": "resultados-repeater-1",
+      "pageId": "resultados",
+      "elementId": "resultados::div:1/main:1/section:1/div:1/article:1",
       "dataSourceId": "supabase-table_practice_attempts",
       "itemContext": "record",
-      "pageSize": 8,
-      "emptyMessage": "Tus intentos aparecerán aquí después de practicar.",
-      "errorMessage": "No pudimos cargar tus intentos. Intenta nuevamente."
+      "pageSize": 10,
+      "emptyMessage": "Todavía no tienes intentos guardados.",
+      "errorMessage": "No pudimos cargar tus resultados."
     },
     {
       "id": "gestion-repeater-1",
@@ -949,38 +561,75 @@
       "includeUnpublished": true
     }
   ],
-  "recordToggles": [
+  "dataActions": [
     {
-      "id": "detalle-record-toggle-1",
+      "id": "detalle-data-action-1",
       "pageId": "detalle",
-      "elementId": "detalle::div:1/main:1/header:1/button:1",
-      "dataSourceId": "supabase-table_favorite_practices",
+      "elementId": "detalle::div:1/main:1/section:5/button:1",
+      "dataSourceId": "supabase-table_practice_attempts",
+      "action": "create",
       "contextKey": "record",
+      "recordMode": "context",
+      "valueSource": "fixed",
+      "fieldMappings": [
+        {
+          "field": "practice_id",
+          "runtimeValue": {
+            "key": "js-lab::variables",
+            "path": [
+              "practice_id"
+            ]
+          }
+        },
+        {
+          "field": "score",
+          "runtimeValue": {
+            "key": "js-lab::variables",
+            "path": [
+              "score_overall"
+            ]
+          }
+        },
+        {
+          "field": "mediapipe_result",
+          "runtimeValue": {
+            "key": "js-lab::variables",
+            "path": [
+              "attempt_result"
+            ]
+          }
+        },
+        {
+          "field": "duration_seconds",
+          "runtimeValue": {
+            "key": "js-lab::variables",
+            "path": [
+              "duration_seconds"
+            ]
+          }
+        }
+      ],
       "ownerField": "user_id",
-      "recordField": "practice_id",
-      "activeLabel": "★ Guardado",
-      "inactiveLabel": "☆ Guardar"
+      "successMessage": "Intento guardado en tu progreso."
     }
   ],
   "motionActivities": [
     {
       "id": "detalle-motion-1",
+      "runtimeSourceId": "learner-motion",
+      "runtimeOutputId": "learner_video_results",
       "pageId": "detalle",
-      "elementId": "detalle::div:1/main:1/section:1/div:1/section:1",
-      "mode": "compare",
-      "componentType": "compare",
+      "elementId": "detalle::div:1/main:1/section:1/article:2/section:1",
+      "mode": "analyze",
+      "componentType": "analyze",
       "input": {
         "type": "camera",
         "durationMs": 10000,
-        "facingMode": "user"
+        "facingMode": "user",
+        "continuous": true
       },
       "reference": {
-        "type": "data",
-        "dataSourceId": "supabase-table_practices",
-        "contextKey": "record",
-        "recordMode": "context",
-        "videoField": "media_url",
-        "templateField": "mediapipe_reference"
+        "type": "none"
       },
       "presentation": {
         "referenceDisplay": "video-reference",
@@ -999,8 +648,7 @@
         }
       },
       "evaluator": {
-        "type": "sequence",
-        "passingScore": 75
+        "type": "quality"
       },
       "processing": {
         "checkpointReduction": true,
@@ -1008,15 +656,6 @@
       },
       "referenceOutput": {
         "type": "download"
-      },
-      "persistence": {
-        "dataSourceId": "supabase-table_practice_attempts",
-        "contextKey": "record",
-        "relationField": "practice_id",
-        "scoreField": "score",
-        "feedbackField": "feedback",
-        "resultField": "mediapipe_result",
-        "durationField": "duration_seconds"
       }
     },
     {

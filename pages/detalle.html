@@ -107,19 +107,27 @@
 @media(max-width:767px){.required-hand-field{grid-template-columns:1fr}.required-hand-field small{grid-column:auto}}
 @media(max-width:767px){.motion-stage-editor{padding:14px 12px}.motion-stage-editor__heading{align-items:flex-start}.motion-stage-editor__heading p{max-width:220px}.motion-stage-inspector{grid-template-columns:1fr auto}.motion-stage-inspector label{grid-column:1/-1}.motion-stage-inspector output{text-align:left}.motion-stage-marker__label{max-width:72px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
-</style>
+
+
+    .practice-page-main{display:grid;gap:24px}.practice-detail-header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}.practice-detail-header h1{margin:0 0 8px;font-size:clamp(32px,5vw,52px)}.practice-detail-header p{margin:0;color:var(--muted)}.practice-pipeline{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:20px;align-items:start}.reference-card,.learner-card,.save-attempt-card,.score-section{padding:22px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}.reference-player{position:relative;overflow:hidden;aspect-ratio:16/9;background:#10221f;border-radius:12px}.reference-player:has(video[hidden]){display:none}.reference-card video,.reference-card canvas{position:absolute;inset:0;display:block;width:100%;height:100%}.reference-card video{object-fit:contain}.reference-card canvas{z-index:1;pointer-events:none}.reference-player:has(video:not([hidden]))+.reference-placeholder{display:none}.reference-placeholder{min-height:240px;display:grid;place-items:center;padding:24px;color:#c8ded9;text-align:center;background:#17324d;border-radius:12px}.reference-playback-actions{display:flex;align-items:center;gap:12px;margin-top:12px}.reference-playback-actions .button{flex:0 0 auto}.reference-playback-actions span{color:var(--muted);font-size:12px}.reference-playback-actions button:disabled{cursor:not-allowed;opacity:.55}.learner-card .motion-activity{padding:0;border:0;box-shadow:none}.learner-card .motion-activity__heading{display:none}.pipeline-status{margin:0;padding:14px 16px;color:#28594e;background:#e9f5f1;border:1px solid #badbd1;border-radius:12px}.score-card-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.score-card-grid>[data-builder-variable-display]:last-child{grid-column:1/-1}.save-attempt-card{display:flex;align-items:center;justify-content:space-between;gap:24px}.save-attempt-card h2,.save-attempt-card p{margin:0}.save-attempt-card p{margin-top:5px;color:var(--muted)}.save-attempt-card button:disabled{cursor:not-allowed;opacity:.5}[data-builder-python-lab][data-builder-python-lab-public="false"],[data-builder-js-lab][data-builder-js-lab-public="false"]{display:none!important}@media(max-width:900px){.practice-pipeline{grid-template-columns:1fr}.score-card-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.practice-detail-header,.save-attempt-card{align-items:stretch;flex-direction:column}.reference-playback-actions{align-items:stretch;flex-direction:column}.reference-playback-actions .button{width:100%}.score-card-grid{grid-template-columns:1fr}.score-card-grid>[data-builder-variable-display]:last-child{grid-column:auto}.save-attempt-card .button{width:100%}}
+[data-builder-js-lab][data-builder-js-lab-public="false"] { display: none !important; }
+[data-builder-python-lab][data-builder-python-lab-public="false"] { display: none !important; }</style>
   </head>
   <body>
+
     <div class="lsp-page page-detalle"><div class="site-header-shell"><header class="site-header">
     <button data-builder-flow-action="navigate" data-builder-flow-target="inicio" class="brand" type="button"><span aria-hidden="true">LSP</span><strong>Aprende LSP</strong></button>
-    <nav aria-label="Navegación principal"><button data-builder-flow-action="navigate" data-builder-flow-target="inicio" class="nav-link" type="button">Inicio</button><button data-builder-flow-action="navigate" data-builder-flow-target="catalogo" class="nav-link is-active" type="button">Aprender</button><button data-builder-flow-action="navigate" data-builder-flow-target="progreso" class="nav-link" type="button">Progreso</button><button data-builder-flow-action="navigate" data-builder-flow-target="perfil" class="nav-link" type="button">Perfil</button><button data-builder-flow-action="navigate" data-builder-flow-target="gestion" data-builder-role-visible="teacher" class="nav-link" type="button">Crear</button><button data-builder-auth-action="logout" data-builder-auth-visible="signed-in" class="nav-signout" type="button" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M18 12H9"></path></svg><span class="sr-only">Cerrar sesión</span></button></nav>
-  </header></div><main class="page-main">
-  <header class="practice-detail-header"><div><span class="pill">Nivel <span data-builder-bind-field="difficulty" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">1</span> · <span data-builder-bind-field="estimated_minutes" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">5</span> min</span><h1 data-builder-bind-field="title" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">Saludos básicos</h1><p data-builder-bind-field="description" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">Observa la referencia y realiza el movimiento completo.</p></div><button data-builder-flow-action="toggle-record" data-builder-flow-data-source="table-favorite-practices" data-builder-flow-owner-field="user_id" data-builder-flow-record-field="practice_id" data-builder-flow-context="record" data-builder-flow-active-label="★ Guardado" data-builder-flow-inactive-label="☆ Guardar" class="favorite-prototype" type="button" aria-pressed="false">☆ Guardar</button></header>
-  <section class="learning-workspace" data-motion-workspace="">
-    <aside class="reference-view" aria-labelledby="reference-title"><div class="workspace-heading"><span>1</span><div><p class="eyebrow">Observa</p><h2 id="reference-title">Referencia <small>Vista espejo</small></h2></div></div><div class="reference-stage"><video data-motion-reference-video="" muted="" playsinline="" hidden=""></video><canvas data-motion-reference-preview="" aria-label="Puntos de la referencia de movimiento en vista espejo"></canvas><p data-motion-reference-empty="">Cargando referencia…</p></div><div class="reference-actions"><button class="button secondary" data-motion-reference-replay="" type="button" disabled="">Reproducir referencia</button><span data-motion-reference-status="" role="status" aria-live="polite">Consultando la práctica seleccionada…</span></div><p class="expert-note">La referencia debe ser revisada por personas conocedoras de Lengua de Señas Panameña antes de utilizarse para evaluar.</p></aside>
-    <div class="learner-view"><div class="workspace-heading"><span>2</span><div><p class="eyebrow">Practica</p><h2>Tu movimiento</h2></div></div><section data-motion-activity="true" data-motion-component-type="compare" data-motion-mode="compare" data-motion-layout-version="3" data-motion-input-source="camera" data-motion-input-selector="" data-motion-input-url="" data-motion-facing-mode="user" data-motion-reference-source="data" data-motion-reference-table="table-practices" data-motion-reference-context="record" data-motion-reference-record-mode="context" data-motion-reference-record-id="" data-motion-reference-video-field="media_url" data-motion-reference-template-field="mediapipe_reference" data-motion-reference-url="" data-motion-reference-template="" data-motion-reference-display="video-reference" data-motion-show-results="false" data-motion-reference-save="download" data-motion-reference-save-table="" data-motion-reference-save-context="record" data-motion-reference-save-record-mode="context" data-motion-reference-save-record-id="" data-motion-reference-save-field="mediapipe_reference" data-motion-duration="10000" data-vision-model="holistic-landmarker" data-vision-model-url="https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task" data-vision-delegate="auto" data-vision-evaluator="sequence" data-vision-landmarks="hands,pose" data-vision-confidence="0.5" data-vision-smoothing="3" data-vision-checkpoints="true" data-vision-passing-score="75" data-vision-expected-label="" data-vision-minimum-count="1" data-vision-category-index="0" data-vision-minimum-coverage="0.25" data-motion-save="true" data-motion-result-table="table-practice-attempts" data-motion-result-context="record" data-motion-result-relation-field="practice_id" data-motion-result-score-field="score" data-motion-result-feedback-field="feedback" data-motion-result-details-field="mediapipe_result" data-motion-result-duration-field="duration_seconds" class="motion-activity"><header data-motion-part="heading" class="motion-activity__heading">
-    <p class="motion-activity__eyebrow">Practica</p>
-    <h2>Comparar referencias</h2>
+    <nav aria-label="Navegación principal"><button data-builder-flow-action="navigate" data-builder-flow-target="inicio" data-builder-auth-visible="signed-in" class="nav-link" type="button">Inicio</button><button data-builder-flow-action="navigate" data-builder-flow-target="catalogo" class="nav-link is-active" type="button">Aprender</button><button data-builder-flow-action="navigate" data-builder-flow-target="gestion" data-builder-auth-visible="signed-in" class="nav-link" type="button">Crear</button><button data-builder-flow-action="navigate" data-builder-flow-target="bienvenida" data-builder-auth-visible="signed-out" class="nav-link" type="button">Ingresar</button><button data-builder-auth-action="logout" data-builder-auth-visible="signed-in" class="nav-signout" type="button" aria-label="Cerrar sesión" title="Cerrar sesión"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M18 12H9"></path></svg><span class="sr-only">Cerrar sesión</span></button></nav>
+  </header></div><main class="page-main practice-page-main">
+    <header class="practice-detail-header">
+      <div><p class="eyebrow">Práctica guiada</p><h1 data-builder-bind-field="title" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">Práctica de LSP</h1><p data-builder-bind-field="description" data-builder-bind-target="text" data-builder-data-source="table-practices" data-builder-data-scope="context">Observa la referencia y realiza tu intento.</p></div>
+      <button data-builder-flow-action="navigate" data-builder-flow-target="catalogo" class="button secondary" type="button">← Volver al catálogo</button>
+    </header>
+    <section class="practice-pipeline">
+      <article class="reference-card"><div class="section-heading"><p class="eyebrow">1 · Observa</p><h2>Referencia</h2></div><div class="reference-player"><video data-reference-video="" controls="" playsinline="" hidden=""></video><canvas data-reference-overlay="" hidden=""></canvas></div><div class="reference-placeholder">La referencia aparecerá aquí cuando termine de cargarse.</div><div class="reference-playback-actions"><button data-reference-play="" class="button secondary" type="button" disabled="">Ver referencia</button><span data-reference-play-status="" role="status" aria-live="polite">Cargando referencia…</span></div></article>
+      <article class="learner-card"><div class="section-heading"><p class="eyebrow">2 · Practica</p><h2>Tu intento</h2></div><section data-motion-activity="true" data-builder-runtime-source-name="Learner video results" data-builder-runtime-output-id="learner_video_results" data-builder-runtime-output-name="Landmark frames" data-builder-runtime-output-type="json" data-motion-component-type="analyze" data-motion-mode="analyze" data-motion-layout-version="4" data-motion-input-source="camera" data-motion-input-selector="" data-motion-input-url="" data-motion-facing-mode="user" data-motion-reference-source="data" data-motion-reference-table="" data-motion-reference-context="record" data-motion-reference-record-mode="context" data-motion-reference-record-id="" data-motion-reference-video-field="media_url" data-motion-reference-template-field="mediapipe_reference" data-motion-reference-url="" data-motion-reference-template="" data-motion-reference-display="video-reference" data-motion-show-results="false" data-motion-reference-save="download" data-motion-reference-save-table="" data-motion-reference-save-context="record" data-motion-reference-save-record-mode="context" data-motion-reference-save-record-id="" data-motion-reference-save-field="mediapipe_reference" data-motion-duration="10000" data-vision-model="holistic-landmarker" data-vision-model-url="https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task" data-vision-delegate="auto" data-vision-evaluator="quality" data-vision-landmarks="hands,pose" data-vision-confidence="0.5" data-vision-smoothing="3" data-vision-checkpoints="true" data-vision-passing-score="75" data-vision-expected-label="" data-vision-minimum-count="1" data-vision-category-index="0" data-vision-minimum-coverage="0.25" data-motion-save="false" data-motion-result-table="" data-motion-result-context="record" data-motion-result-relation-field="practice_id" data-motion-result-score-field="score" data-motion-result-feedback-field="feedback" data-motion-result-details-field="mediapipe_result" data-motion-result-duration-field="duration_seconds" class="motion-activity" data-builder-runtime-source-id="learner-motion"><header data-motion-part="heading" class="motion-activity__heading">
+    <p class="motion-activity__eyebrow">Análisis temporal</p>
+    <h2>Analizar video</h2>
   </header>
   <div data-motion-part="input" class="motion-input">
     <video data-motion-camera="" autoplay="" muted="" playsinline="" hidden=""></video>
@@ -131,51 +139,501 @@
       <button data-motion-crop-handle="left" class="motion-crop-handle" type="button" aria-label="Ajustar borde izquierdo"></button>
     </div>
     <div data-motion-placeholder="" class="motion-input__placeholder">
-      <span class="motion-input__icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M8 6h16a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H8a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3Zm8 5v10m-5-5h10" fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"></path></svg></span>
-      <strong>Entrada de movimiento</strong>
-      <small>La cámara o el video se activa únicamente cuando la persona comienza.</small>
+      <span class="motion-input__icon" aria-hidden="true"><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="5" y="7" width="38" height="34" rx="5" fill="none" stroke="currentColor" stroke-width="2.5"></rect><path d="M11 31h5l4-12 6 17 5-11 3 6h4" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path><circle cx="20" cy="19" r="2" fill="currentColor"></circle><circle cx="31" cy="25" r="2" fill="currentColor"></circle></svg></span>
+      <strong>Video para analizar</strong>
+      <small>Usa la cámara o selecciona un video. MediaPipe publicará los landmarks al finalizar.</small>
     </div>
   </div>
   <div data-motion-part="controls" class="motion-controls">
-    <button data-motion-start="" type="button">Comenzar</button>
-    <button data-motion-stop="" type="button" hidden="">Detener y guardar</button>
-    <button data-motion-replay="" type="button" hidden="">Reproducir referencia</button>
-    <span data-motion-status="" role="status">Pulsa Comenzar cuando tus manos y la parte superior del cuerpo estén visibles.</span>
+    <button data-motion-start="" data-motion-primary="" type="button">Iniciar captura</button>
+    <button data-motion-stop="" data-motion-secondary="" type="button" hidden="">Detener y finalizar</button>
+    <button data-motion-replay="" type="button" hidden="">Ver análisis</button>
+    <span data-motion-status="" role="status">Configura la actividad en Movimiento.</span>
+    <div data-motion-ready="" hidden=""><span aria-hidden="true">✓</span><strong>Landmark frames disponibles</strong><small>Revisa visualmente los puntos o utiliza la salida en otra operación.</small></div>
     <div data-motion-video-source="" class="motion-video-source" hidden="">
-      <label>Video de referencia<input data-motion-file="" type="file" accept="video/mp4,video/webm,video/quicktime"></label>
-      <label>Desde (s)<input data-motion-segment-start="" type="number" min="0" step="0.1" value="0"></label>
-      <label>Hasta (s)<input data-motion-segment-end="" type="number" min="0.1" step="0.1" value="10"></label>
-      <div class="motion-crop-actions"><strong>Encuadre</strong><button data-motion-crop-edit="" type="button">Elegir área</button><button data-motion-crop-reset="" type="button">Video completo</button></div>
+      <label><span data-motion-file-label="">Archivo de video</span><input data-motion-file="" type="file" accept="video/mp4,video/webm,video/quicktime"></label>
+
     </div>
   </div>
-  <div data-motion-part="results" data-motion-results="" class="motion-results" hidden="">
-    <strong data-motion-overall="" class="motion-results__overall">56% de coincidencia</strong>
-    <div data-motion-scores="" class="motion-results__scores">
-      <div class="motion-results__score"><small>Forma de mano</small><strong>63%</strong></div>
-      <div class="motion-results__score"><small>Ubicación</small><strong>33%</strong></div>
-      <div class="motion-results__score"><small>Orientación</small><strong>73%</strong></div>
-      <div class="motion-results__score"><small>Trayectoria</small><strong>64%</strong></div>
-      <div class="motion-results__score"><small>Rostro y postura</small><strong>43%</strong></div>
-      <div class="motion-results__score"><small>Ritmo</small><strong>47%</strong></div>
-    </div>
-    <p data-motion-feedback="" class="motion-results__feedback">Compara la altura y la distancia de la palma respecto al rostro, los hombros o el pecho.</p>
-    <section data-motion-stage-results="" class="motion-results__stages" hidden="">
-      <h3>Etapas del movimiento</h3>
-      <div data-motion-stage-scores="" class="motion-results__stage-list">
-        <article class="motion-stage-result is-not-scored"><span>Inicio</span><strong>No cuenta</strong><button type="button">Reproducir esta etapa</button></article>
-        <article class="motion-stage-result"><span>Momento clave 1</span><strong>54%</strong><button type="button">Reproducir esta etapa</button></article>
-        <article class="motion-stage-result"><span>Momento clave 2</span><strong>57%</strong><button type="button">Reproducir esta etapa</button></article>
-        <article class="motion-stage-result is-not-scored"><span>Final</span><strong>No cuenta</strong><button type="button">Reproducir esta etapa</button></article>
-      </div>
+  </section></article>
     </section>
-    <a data-motion-download="" class="motion-results__download" hidden="">Descargar plantilla</a>
-  </div></section></div>
+    <p class="pipeline-status" data-practice-pipeline-status="" role="status">Preparando la práctica…</p>
+    <div data-builder-runtime-source-id="reference-bundle" data-builder-runtime-source-name="Reference bundle" data-builder-runtime-output-id="reference_bundle" data-builder-runtime-output-name="Video, landmarks, and DTW sequences" data-builder-runtime-output-type="json" hidden=""></div>
+    <div data-builder-runtime-source-id="practice-context" data-builder-runtime-source-name="Practice Context" data-builder-runtime-output-id="practice_context" data-builder-runtime-output-name="Practice context" data-builder-runtime-output-type="json" hidden=""></div>
+    <div data-builder-function-id="manhattan" hidden=""></div>
+    <section data-builder-python-lab="" data-builder-python-lab-public="false" data-builder-python-lab-code="reference_bundle = runtime_values[&quot;reference_bundle&quot;]
+learner_video_results = runtime_values[&quot;learner_video_results&quot;]
+
+saved_sequences = reference_bundle.get(&quot;pythonSequences&quot;)
+if saved_sequences:
+    reference_pose_sequence = saved_sequences[&quot;pose&quot;]
+    reference_left_hand_sequence = saved_sequences[&quot;leftHand&quot;]
+    reference_right_hand_sequence = saved_sequences[&quot;rightHand&quot;]
+else:
+    reference_pose_sequence = []
+    reference_left_hand_sequence = []
+    reference_right_hand_sequence = []
+    for results in _builder_video_results(reference_bundle[&quot;landmarkFrames&quot;]):
+        pose, left_hand, right_hand = extract_landmarks(results)
+        reference_pose_sequence.append(pose)
+        reference_left_hand_sequence.append(left_hand)
+        reference_right_hand_sequence.append(right_hand)
+
+learner_pose_sequence = []
+learner_left_hand_sequence = []
+learner_right_hand_sequence = []
+
+for results in learner_video_results:
+    pose, left_hand, right_hand = extract_landmarks(results)
+    learner_pose_sequence.append(pose)
+    learner_left_hand_sequence.append(left_hand)
+    learner_right_hand_sequence.append(right_hand)" data-builder-python-lab-items="[]" data-builder-python-lab-libraries="[{&quot;id&quot;:&quot;mediapipe-landmark-utilities&quot;,&quot;name&quot;:&quot;MediaPipe Landmark Utilities&quot;,&quot;description&quot;:&quot;Converts MediaPipe pose and hand landmarks into flattened XYZ lists.&quot;,&quot;language&quot;:&quot;python&quot;,&quot;moduleName&quot;:&quot;landmark_utils&quot;,&quot;provenance&quot;:&quot;imported&quot;,&quot;source&quot;:&quot;import numpy as np\n\n\ndef landmark_to_array(mp_landmark_list):\n    \&quot;\&quot;\&quot;Convert a MediaPipe landmark list to a NumPy array of shape (n, 3).\&quot;\&quot;\&quot;\n    keypoints = []\n\n    for landmark in mp_landmark_list.landmark:\n        keypoints.append([\n            landmark.x,\n            landmark.y,\n            landmark.z\n        ])\n\n    return np.nan_to_num(keypoints)\n\n\ndef extract_landmarks(results):\n    \&quot;\&quot;\&quot;\n    Extract pose, left-hand, and right-hand landmarks.\n\n    Returns:\n        pose:       list of 99 values  (33 landmarks × 3 coordinates)\n        left_hand:  list of 63 values  (21 landmarks × 3 coordinates)\n        right_hand: list of 63 values  (21 landmarks × 3 coordinates)\n\n    Missing hands are represented by zeros.\n    \&quot;\&quot;\&quot;\n\n    pose = landmark_to_array(\n        results.pose_landmarks\n    ).reshape(99).tolist()\n\n    left_hand = np.zeros(63).tolist()\n\n    if results.left_hand_landmarks:\n        left_hand = landmark_to_array(\n            results.left_hand_landmarks\n        ).reshape(63).tolist()\n\n    right_hand = np.zeros(63).tolist()\n\n    if results.right_hand_landmarks:\n        right_hand = landmark_to_array(\n            results.right_hand_landmarks\n        ).reshape(63).tolist()\n\n    return pose, left_hand, right_hand&quot;,&quot;functions&quot;:[]}]" data-builder-runtime-source-name="Python Lab" data-builder-runtime-output-id="variables" data-builder-runtime-output-name="Variables" data-builder-runtime-output-type="json" data-gjs-name="Python Lab" style="display:grid;gap:1rem;width:100%;padding:1rem;box-sizing:border-box;color:#e8edf2;background:#0d1117;border:1px solid #2f3a45;border-radius:.9rem;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;box-shadow:0 14px 34px rgba(0,0,0,.24)" data-builder-runtime-source-id="python-lab">
+    <header style="display:grid;gap:.3rem;padding-bottom:.8rem;border-bottom:1px solid #2f3a45"><strong style="color:#9ed8ca;font-size:1rem">&gt;_ Python Lab</strong><span style="color:#81909d;font:500 .74rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Ejecuta Python y NumPy localmente mediante Pyodide.</span></header>
+    <label style="display:grid;gap:.4rem;color:#aebdca;font-size:.72rem;font-weight:700">Código Python<textarea data-builder-python-lab-code-editor="" rows="12" spellcheck="false" style="width:100%;min-height:16rem;box-sizing:border-box;padding:.85rem;color:#e8edf2;background:#080b10;border:1px solid #3a4754;border-radius:.55rem;resize:vertical;font:500 .78rem/1.6 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">reference_bundle = runtime_values["reference_bundle"]
+learner_video_results = runtime_values["learner_video_results"]
+
+saved_sequences = reference_bundle.get("pythonSequences")
+if saved_sequences:
+    reference_pose_sequence = saved_sequences["pose"]
+    reference_left_hand_sequence = saved_sequences["leftHand"]
+    reference_right_hand_sequence = saved_sequences["rightHand"]
+else:
+    reference_pose_sequence = []
+    reference_left_hand_sequence = []
+    reference_right_hand_sequence = []
+    for results in _builder_video_results(reference_bundle["landmarkFrames"]):
+        pose, left_hand, right_hand = extract_landmarks(results)
+        reference_pose_sequence.append(pose)
+        reference_left_hand_sequence.append(left_hand)
+        reference_right_hand_sequence.append(right_hand)
+
+learner_pose_sequence = []
+learner_left_hand_sequence = []
+learner_right_hand_sequence = []
+
+for results in learner_video_results:
+    pose, left_hand, right_hand = extract_landmarks(results)
+    learner_pose_sequence.append(pose)
+    learner_left_hand_sequence.append(left_hand)
+    learner_right_hand_sequence.append(right_hand)</textarea></label>
+    <p style="margin:0;color:#d7a95b;font:600 .72rem/1.45 Inter,ui-sans-serif,system-ui,sans-serif">Python importado es código ejecutable. El worker protege la interfaz, pero no convierte código no confiable en seguro.</p>
+    <div style="display:flex;gap:.65rem;align-items:center"><button data-builder-python-lab-run="" type="button" style="min-height:2.65rem;flex:1;padding:0 1rem;color:#0b1513;background:#7dd3c2;border:0;border-radius:.45rem;font:750 .78rem Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer">Ejecutar Python Lab →</button><button data-builder-python-lab-cancel="" type="button" hidden="" style="min-height:2.65rem;padding:0 1rem;color:#e8edf2;background:#342027;border:1px solid #74404d;border-radius:.45rem">Cancelar</button><details style="position:relative"><summary title="Ver variables" aria-label="Ver variables" style="display:grid;place-items:center;width:2.65rem;height:2.65rem;box-sizing:border-box;color:#9ed8ca;background:#111923;border:1px solid #43515e;border-radius:.45rem;cursor:pointer;list-style:none;font-weight:800">▦</summary><div style="position:absolute;z-index:5;right:0;top:calc(100% + .45rem);width:min(42rem,80vw);max-height:24rem;overflow:auto;padding:.8rem;background:#0d1117;border:1px solid #43515e;border-radius:.6rem;box-shadow:0 16px 40px rgba(0,0,0,.4)"><strong style="display:block;margin-bottom:.6rem;color:#fff">Variables</strong><table style="width:100%;border-collapse:collapse;color:#c9d4dc;font:500 .7rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace"><thead><tr><th style="text-align:left">Nombre</th><th style="text-align:left">Tipo</th><th style="text-align:left">Valor / estado</th></tr></thead><tbody data-builder-python-lab-variable-rows=""><tr><td colspan="3">Ejecuta o analiza datos para ver variables.</td></tr></tbody></table></div></details></div>
+    <p data-builder-python-lab-status="" aria-live="polite" style="min-height:1.2rem;margin:0;color:#86b9ad;font-size:.72rem"></p>
+  </section><section data-builder-js-lab="" data-builder-js-lab-public="false" data-builder-js-lab-code="function sequenceHasMovement(sequence) {
+  return Array.isArray(sequence) &amp;&amp; sequence.some((frame) =>
+    Array.isArray(frame) &amp;&amp; frame.some((value) => Math.abs(Number(value)) > 0.000001)
+  );
+}
+
+function compareDtw(referenceSequence, learnerSequence, dimensions) {
+  const referenceActive = sequenceHasMovement(referenceSequence);
+  const learnerActive = sequenceHasMovement(learnerSequence);
+  if (!referenceActive) {
+    return { included: false, reason: &quot;not-used&quot;, distance: 0, pathLength: 0, error: 0, score: null };
+  }
+  if (!learnerActive) {
+    return { included: true, reason: &quot;missing-movement&quot;, distance: null, pathLength: 0, error: 1, score: 0 };
+  }
+  const dtw = new DynamicTimeWarping(referenceSequence, learnerSequence, manhattan);
+  const distance = dtw.getDistance();
+  const pathLength = dtw.getPath().length;
+  const error = distance / Math.max(1, pathLength * dimensions);
+  const score = Math.max(0, Math.min(100, Math.round(100 * Math.exp(-error / 0.12))));
+  return { included: true, reason: &quot;compared&quot;, distance, pathLength, error, score };
+}
+
+const sequences = runtimeValues.pythonLab;
+let comparison_pose = compareDtw(sequences.reference_pose_sequence, sequences.learner_pose_sequence, 99);
+let comparison_left = compareDtw(sequences.reference_left_hand_sequence, sequences.learner_left_hand_sequence, 63);
+let comparison_right = compareDtw(sequences.reference_right_hand_sequence, sequences.learner_right_hand_sequence, 63);
+let error_pose = comparison_pose.error;
+let error_left = comparison_left.error;
+let error_right = comparison_right.error;
+let score_pose = comparison_pose.score;
+let score_left = comparison_left.score;
+let score_right = comparison_right.score;
+const weightedParts = [
+  comparison_left.included ? [comparison_left.score, 0.5] : null,
+  comparison_right.included ? [comparison_right.score, 0.5] : null
+].filter(Boolean);
+const totalWeight = weightedParts.reduce((sum, part) => sum + part[1], 0);
+const hasMissingMovement = [comparison_left, comparison_right]
+  .some((comparison) => comparison.reason === &quot;missing-movement&quot;);
+let score_overall = totalWeight
+  ? Math.round(weightedParts.reduce((sum, part) => sum + part[0] * part[1], 0) / totalWeight)
+  : 0;
+if (hasMissingMovement) score_overall = 0;
+let feedback = hasMissingMovement ? &quot;El intento está incompleto: no se detectó una mano requerida por la referencia.&quot;
+  : score_overall >= 90 ? &quot;Excelente coincidencia. El movimiento fue muy consistente con la referencia.&quot;
+  : score_overall >= 75 ? &quot;Buen intento. Revisa la forma, orientación y ritmo de las manos.&quot;
+  : score_overall >= 50 ? &quot;Vas avanzando. Practica la trayectoria y posición de las manos.&quot;
+  : &quot;Inténtalo otra vez más despacio y mantén las manos completas dentro del encuadre.&quot;;
+let practice_id = runtimeValues.practiceContext.practice_id;
+let duration_seconds = runtimeValues.practiceContext.duration_seconds;
+let attempt_result = {
+  algorithm: &quot;exact-dtw-manhattan&quot;,
+  version: 2,
+  scoringComponents: [&quot;leftHand&quot;, &quot;rightHand&quot;],
+  poseDiagnosticOnly: true,
+  pose: comparison_pose,
+  leftHand: comparison_left,
+  rightHand: comparison_right,
+  referenceFrames: sequences.reference_pose_sequence.length,
+  learnerFrames: sequences.learner_pose_sequence.length
+};" data-builder-runtime-source-name="JS Lab" data-builder-runtime-output-id="variables" data-builder-runtime-output-name="Variables" data-builder-runtime-output-type="json" data-gjs-name="JS Lab" style="display:grid;gap:1rem;width:100%;padding:1rem;box-sizing:border-box;color:#e8edf2;background:#0d1117;border:1px solid #2f3a45;border-radius:.9rem;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;box-shadow:0 14px 34px rgba(0,0,0,.24)" data-builder-runtime-source-id="js-lab">
+    <header style="display:grid;gap:.3rem;padding-bottom:.8rem;border-bottom:1px solid #2f3a45">
+      <strong style="color:#9ed8ca;font-size:1rem">&lt;/&gt; JS Lab</strong>
+      <span style="color:#81909d;font:500 .74rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Conecta, ejecuta e inspecciona operaciones JavaScript reutilizables.</span>
+    </header>
+    <label style="display:grid;gap:.4rem;color:#aebdca;font-size:.72rem;font-weight:700">Código JavaScript
+      <textarea data-builder-js-lab-code-editor="" rows="10" spellcheck="false" style="width:100%;min-height:14rem;box-sizing:border-box;padding:.85rem;color:#e8edf2;background:#080b10;border:1px solid #3a4754;border-radius:.55rem;resize:vertical;font:500 .78rem/1.6 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">function sequenceHasMovement(sequence) {
+  return Array.isArray(sequence) &amp;&amp; sequence.some((frame) =&gt;
+    Array.isArray(frame) &amp;&amp; frame.some((value) =&gt; Math.abs(Number(value)) &gt; 0.000001)
+  );
+}
+
+function compareDtw(referenceSequence, learnerSequence, dimensions) {
+  const referenceActive = sequenceHasMovement(referenceSequence);
+  const learnerActive = sequenceHasMovement(learnerSequence);
+  if (!referenceActive) {
+    return { included: false, reason: "not-used", distance: 0, pathLength: 0, error: 0, score: null };
+  }
+  if (!learnerActive) {
+    return { included: true, reason: "missing-movement", distance: null, pathLength: 0, error: 1, score: 0 };
+  }
+  const dtw = new DynamicTimeWarping(referenceSequence, learnerSequence, manhattan);
+  const distance = dtw.getDistance();
+  const pathLength = dtw.getPath().length;
+  const error = distance / Math.max(1, pathLength * dimensions);
+  const score = Math.max(0, Math.min(100, Math.round(100 * Math.exp(-error / 0.12))));
+  return { included: true, reason: "compared", distance, pathLength, error, score };
+}
+
+const sequences = runtimeValues.pythonLab;
+let comparison_pose = compareDtw(sequences.reference_pose_sequence, sequences.learner_pose_sequence, 99);
+let comparison_left = compareDtw(sequences.reference_left_hand_sequence, sequences.learner_left_hand_sequence, 63);
+let comparison_right = compareDtw(sequences.reference_right_hand_sequence, sequences.learner_right_hand_sequence, 63);
+let error_pose = comparison_pose.error;
+let error_left = comparison_left.error;
+let error_right = comparison_right.error;
+let score_pose = comparison_pose.score;
+let score_left = comparison_left.score;
+let score_right = comparison_right.score;
+const weightedParts = [
+  comparison_left.included ? [comparison_left.score, 0.5] : null,
+  comparison_right.included ? [comparison_right.score, 0.5] : null
+].filter(Boolean);
+const totalWeight = weightedParts.reduce((sum, part) =&gt; sum + part[1], 0);
+const hasMissingMovement = [comparison_left, comparison_right]
+  .some((comparison) =&gt; comparison.reason === "missing-movement");
+let score_overall = totalWeight
+  ? Math.round(weightedParts.reduce((sum, part) =&gt; sum + part[0] * part[1], 0) / totalWeight)
+  : 0;
+if (hasMissingMovement) score_overall = 0;
+let feedback = hasMissingMovement ? "El intento está incompleto: no se detectó una mano requerida por la referencia."
+  : score_overall &gt;= 90 ? "Excelente coincidencia. El movimiento fue muy consistente con la referencia."
+  : score_overall &gt;= 75 ? "Buen intento. Revisa la forma, orientación y ritmo de las manos."
+  : score_overall &gt;= 50 ? "Vas avanzando. Practica la trayectoria y posición de las manos."
+  : "Inténtalo otra vez más despacio y mantén las manos completas dentro del encuadre.";
+let practice_id = runtimeValues.practiceContext.practice_id;
+let duration_seconds = runtimeValues.practiceContext.duration_seconds;
+let attempt_result = {
+  algorithm: "exact-dtw-manhattan",
+  version: 2,
+  scoringComponents: ["leftHand", "rightHand"],
+  poseDiagnosticOnly: true,
+  pose: comparison_pose,
+  leftHand: comparison_left,
+  rightHand: comparison_right,
+  referenceFrames: sequences.reference_pose_sequence.length,
+  learnerFrames: sequences.learner_pose_sequence.length
+};</textarea>
+    </label>
+    <p style="margin:0;color:#86b9ad;font:600 .72rem/1.45 Inter,ui-sans-serif,system-ui,sans-serif">Todas las variables declaradas con let, const o var se publican juntas como JSON.</p>
+    <div style="display:flex;gap:.65rem;align-items:center">
+      <button data-builder-js-lab-run="" type="button" style="min-height:2.65rem;flex:1;padding:0 1rem;color:#0b1513;background:#7dd3c2;border:0;border-radius:.45rem;font:750 .78rem Inter,ui-sans-serif,system-ui,sans-serif;cursor:pointer">Ejecutar JS Lab →</button>
+      <details data-builder-js-lab-variables="" style="position:relative">
+        <summary title="Ver variables" aria-label="Ver variables" style="display:grid;place-items:center;width:2.65rem;height:2.65rem;box-sizing:border-box;color:#9ed8ca;background:#111923;border:1px solid #43515e;border-radius:.45rem;cursor:pointer;list-style:none;font:800 1rem Inter,ui-sans-serif,system-ui,sans-serif">▦</summary>
+        <div style="position:absolute;z-index:5;right:0;top:calc(100% + .45rem);width:min(42rem,80vw);max-height:24rem;overflow:auto;padding:.8rem;background:#0d1117;border:1px solid #43515e;border-radius:.6rem;box-shadow:0 16px 40px rgba(0,0,0,.4)">
+          <strong style="display:block;margin-bottom:.6rem;color:#fff;font:750 .8rem Inter,ui-sans-serif,system-ui,sans-serif">Variables</strong>
+          <table style="width:100%;border-collapse:collapse;color:#c9d4dc;font:500 .7rem/1.4 ui-monospace,SFMono-Regular,Menlo,monospace">
+            <thead><tr><th style="padding:.4rem;text-align:left;border-bottom:1px solid #33404d">Nombre</th><th style="padding:.4rem;text-align:left;border-bottom:1px solid #33404d">Tipo</th><th style="padding:.4rem;text-align:left;border-bottom:1px solid #33404d">Valor / estado</th></tr></thead>
+            <tbody data-builder-js-lab-variable-rows=""><tr><td colspan="3" style="padding:.65rem .4rem;color:#81909d">Ejecuta o analiza datos para ver variables.</td></tr></tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+    <output data-builder-js-lab-result="" hidden="">—</output>
+    <p data-builder-js-lab-status="" aria-live="polite" style="min-height:1.2rem;margin:0;color:#86b9ad;font-size:.72rem"></p>
+    <div data-builder-js-lab-functions="" hidden=""></div>
   </section>
-  <div class="comparison-toolbar"><button class="button primary" data-motion-sync-replay="" type="button" hidden="">Reproducir ambos</button><span data-motion-sync-status="" role="status" aria-live="polite">Graba un intento para compararlo con la referencia.</span></div>
-  <section class="comparison-results-dock" data-motion-results-dock="" aria-label="Resultados de la comparación"></section>
-  <section class="practice-help"><strong>Antes de comenzar</strong><p>Busca buena iluminación, deja visibles las manos y los hombros, y permite la cámara cuando el navegador lo solicite.</p></section></main><footer class="site-footer"><p>Proyecto educativo de Lengua de Señas Panameña · Medios de demostración pendientes de revisión experta.</p></footer></div>
-    
-  
-<script data-builder-config="true">window.__BUILDER_NAVIGATION__ = {"connections":[{"id":"inicio-flow-1","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"inicio-flow-2","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"inicio-flow-3","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"inicio-flow-4","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"inicio-flow-5","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"inicio-flow-6","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"inicio-flow-7","sourcePage":"inicio","elementId":"inicio::div:1/main:1/section:2/div:2/button:1","event":"click","action":"navigate","targetPage":"progreso"},{"id":"inicio-flow-8","sourcePage":"inicio","elementId":"inicio::div:1/main:1/section:2/div:2/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"catalogo-flow-1","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"catalogo-flow-2","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"catalogo-flow-3","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"catalogo-flow-4","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"catalogo-flow-5","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"catalogo-flow-6","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"catalogo-flow-7","sourcePage":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1","event":"click","action":"navigate","targetPage":"detalle","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"catalogo-flow-8","sourcePage":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/button:1","event":"click","action":"navigate","targetPage":"detalle","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"detalle-flow-1","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"detalle-flow-2","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"detalle-flow-3","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"detalle-flow-4","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"detalle-flow-5","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"detalle-flow-6","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"resultados-flow-1","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"resultados-flow-2","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"resultados-flow-3","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"resultados-flow-4","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"resultados-flow-5","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"resultados-flow-6","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"resultados-flow-7","sourcePage":"resultados","elementId":"resultados::div:1/main:1/div:2/button:1","event":"click","action":"navigate","targetPage":"detalle"},{"id":"resultados-flow-8","sourcePage":"resultados","elementId":"resultados::div:1/main:1/div:2/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"resultados-flow-9","sourcePage":"resultados","elementId":"resultados::div:1/main:1/div:2/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"progreso-flow-1","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"progreso-flow-2","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"progreso-flow-3","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"progreso-flow-4","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"progreso-flow-5","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"progreso-flow-6","sourcePage":"progreso","elementId":"progreso::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"progreso-flow-7","sourcePage":"progreso","elementId":"progreso::div:1/main:1/div:1/button:1","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"perfil-flow-1","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"perfil-flow-2","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"perfil-flow-3","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"perfil-flow-4","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"perfil-flow-5","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"perfil-flow-6","sourcePage":"perfil","elementId":"perfil::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"gestion-flow-1","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"gestion-flow-2","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"gestion-flow-3","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"gestion-flow-4","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"gestion-flow-5","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"gestion-flow-6","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"gestion-flow-7","sourcePage":"gestion","elementId":"gestion::div:1/main:1/section:1/button:1","event":"click","action":"navigate","targetPage":"editor-practica"},{"id":"gestion-flow-8","sourcePage":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/button:1","event":"click","action":"navigate","targetPage":"editor-practica","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"editor-practica-flow-1","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"editor-practica-flow-2","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"editor-practica-flow-3","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"editor-practica-flow-4","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:3","event":"click","action":"navigate","targetPage":"progreso"},{"id":"editor-practica-flow-5","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:4","event":"click","action":"navigate","targetPage":"perfil"},{"id":"editor-practica-flow-6","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"}],"currentPage":"detalle","pageUrls":{"bienvenida":"bienvenida.html","inicio":"inicio.html","catalogo":"catalogo.html","detalle":"detalle.html","resultados":"resultados.html","progreso":"progreso.html","perfil":"perfil.html","gestion":"gestion.html","editor-practica":"editor-practica.html"},"transport":"location","dataSources":[{"id":"supabase-table_profiles","name":"profiles","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"profiles","publishedOnly":false,"requiresAuth":true},{"id":"supabase-table_user_roles","name":"user_roles","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"user_roles","publishedOnly":false,"requiresAuth":true},{"id":"supabase-table_practices","name":"practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practices","publishedOnly":true,"requiresAuth":false,"orderColumn":"sort_order","orderDirection":"asc"},{"id":"supabase-table_practice_attempts","name":"practice_attempts","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_attempts","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"},{"id":"supabase-table_practice_progress","name":"practice_progress","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_progress","publishedOnly":false,"requiresAuth":true,"orderColumn":"last_practiced_at","orderDirection":"desc"},{"id":"supabase-table_favorite_practices","name":"favorite_practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"favorite_practices","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"}],"bindings":[{"id":"inicio-binding-1","pageId":"inicio","elementId":"inicio::div:1/main:1/section:1/h1:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_profiles","sourceMode":"first","field":"display_name"},{"id":"inicio-binding-2","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"score"},{"id":"inicio-binding-3","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:2","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"duration_seconds"},{"id":"inicio-binding-4","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/small:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"created_at"},{"id":"catalogo-binding-1","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"difficulty"},{"id":"catalogo-binding-2","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:2/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"estimated_minutes"},{"id":"catalogo-binding-3","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/h2:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"catalogo-binding-4","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/p:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"detalle-binding-1","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/span:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"difficulty"},{"id":"detalle-binding-2","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/span:1/span:2","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"estimated_minutes"},{"id":"detalle-binding-3","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/h1:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"detalle-binding-4","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/p:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"progreso-binding-1","pageId":"progreso","elementId":"progreso::div:1/main:1/section:2/div:1/article:1/div:1/p:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_progress","sourceMode":"context","field":"status"},{"id":"progreso-binding-2","pageId":"progreso","elementId":"progreso::div:1/main:1/section:2/div:1/article:1/div:1/small:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_progress","sourceMode":"context","field":"last_practiced_at"},{"id":"progreso-binding-3","pageId":"progreso","elementId":"progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:1/b:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_progress","sourceMode":"context","field":"best_score"},{"id":"progreso-binding-4","pageId":"progreso","elementId":"progreso::div:1/main:1/section:2/div:1/article:1/div:2/span:2/b:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_progress","sourceMode":"context","field":"attempts_count"},{"id":"progreso-binding-5","pageId":"progreso","elementId":"progreso::div:1/main:1/section:3/div:1/article:1/div:1/small:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"created_at"},{"id":"progreso-binding-6","pageId":"progreso","elementId":"progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:1/b:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"score"},{"id":"progreso-binding-7","pageId":"progreso","elementId":"progreso::div:1/main:1/section:3/div:1/article:1/div:2/span:2/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"duration_seconds"},{"id":"perfil-binding-1","pageId":"perfil","elementId":"perfil::div:1/main:1/section:1/div:2/h1:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_profiles","sourceMode":"first","field":"display_name"},{"id":"perfil-binding-2","pageId":"perfil","elementId":"perfil::div:1/main:1/section:1/div:2/p:2","target":"text","contextKey":"record","dataSourceId":"supabase-table_profiles","sourceMode":"first","field":"bio"},{"id":"gestion-binding-1","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/h2:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"gestion-binding-2","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/p:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"editor-practica-binding-1","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/input:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"editor-practica-binding-2","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/textarea:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"editor-practica-binding-3","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:1/select:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"difficulty"},{"id":"editor-practica-binding-4","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:2/input:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"estimated_minutes"}],"repeaters":[{"id":"inicio-repeater-1","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1","dataSourceId":"supabase-table_practice_attempts","itemContext":"record","pageSize":1,"emptyMessage":"Todavía no tienes actividad. Revisa el catálogo para comenzar.","errorMessage":"No pudimos cargar tu actividad. Intenta nuevamente."},{"id":"catalogo-repeater-1","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1","dataSourceId":"supabase-table_practices","itemContext":"record","pageSize":6,"pagination":true,"emptyMessage":"Todavía no hay prácticas disponibles.","errorMessage":"No pudimos cargar las prácticas. Intenta nuevamente."},{"id":"progreso-repeater-1","pageId":"progreso","elementId":"progreso::div:1/main:1/section:2/div:1/article:1","dataSourceId":"supabase-table_practice_progress","itemContext":"record","pageSize":6,"emptyMessage":"Todavía no has comenzado una práctica.","errorMessage":"No pudimos cargar tu progreso. Intenta nuevamente."},{"id":"progreso-repeater-2","pageId":"progreso","elementId":"progreso::div:1/main:1/section:3/div:1/article:1","dataSourceId":"supabase-table_practice_attempts","itemContext":"record","pageSize":8,"emptyMessage":"Tus intentos aparecerán aquí después de practicar.","errorMessage":"No pudimos cargar tus intentos. Intenta nuevamente."},{"id":"gestion-repeater-1","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1","dataSourceId":"supabase-table_practices","itemContext":"record","pageSize":12,"pagination":true,"emptyMessage":"Todavía no has creado prácticas.","errorMessage":"No pudimos cargar tus prácticas. Intenta nuevamente.","userFilterColumn":"created_by","includeUnpublished":true}],"recordToggles":[{"id":"detalle-record-toggle-1","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/button:1","dataSourceId":"supabase-table_favorite_practices","contextKey":"record","ownerField":"user_id","recordField":"practice_id","activeLabel":"★ Guardado","inactiveLabel":"☆ Guardar"}],"authentication":{"provider":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","loginPage":"bienvenida","afterLoginPage":"inicio","afterLogoutPage":"bienvenida"},"pageAccess":{"bienvenida":"guestOnly","inicio":"authenticated","catalogo":"authenticated","detalle":"authenticated","resultados":"authenticated","progreso":"authenticated","perfil":"authenticated","gestion":"authenticated","editor-practica":"authenticated"},"pageRoles":{}};
-</script><script data-builder-runtime="true" src="../builder-runtime/navigation.js"></script><script data-motion-config="true">window.__MOTION_ANALYSIS__ = {"activities":[{"id":"detalle-motion-1","pageId":"detalle","elementId":"detalle::div:1/main:1/section:1/div:1/section:1","mode":"compare","componentType":"compare","input":{"type":"camera","durationMs":10000,"facingMode":"user"},"reference":{"type":"data","dataSourceId":"supabase-table_practices","contextKey":"record","recordMode":"context","videoField":"media_url","templateField":"mediapipe_reference"},"presentation":{"referenceDisplay":"video-reference","showResults":false},"detector":{"provider":"mediapipe","task":"holistic-landmarker","modelUrl":"https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task","delegate":"auto","minConfidence":0.5,"landmarks":{"hands":true,"pose":true,"face":false}},"evaluator":{"type":"sequence","passingScore":75},"processing":{"checkpointReduction":true,"smoothing":3},"referenceOutput":{"type":"download"},"persistence":{"dataSourceId":"supabase-table_practice_attempts","contextKey":"record","relationField":"practice_id","scoreField":"score","feedbackField":"feedback","resultField":"mediapipe_result","durationField":"duration_seconds"}},{"id":"editor-practica-motion-1","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:2/div:2/section:1","mode":"reference","componentType":"compare","input":{"type":"camera","durationMs":10000,"facingMode":"user"},"reference":{"type":"none"},"presentation":{"referenceDisplay":"video-reference","showResults":false},"detector":{"provider":"mediapipe","task":"holistic-landmarker","modelUrl":"https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task","delegate":"auto","minConfidence":0.5,"landmarks":{"hands":true,"pose":true,"face":true}},"evaluator":{"type":"sequence","passingScore":75},"processing":{"checkpointReduction":true,"smoothing":3},"referenceOutput":{"type":"form","selector":"[data-motion-template-field]"}}],"authentication":{"provider":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","loginPage":"bienvenida","afterLoginPage":"inicio","afterLogoutPage":"bienvenida"},"currentPage":"detalle","dataSources":[{"id":"supabase-table_profiles","name":"profiles","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"profiles","publishedOnly":false,"requiresAuth":true},{"id":"supabase-table_user_roles","name":"user_roles","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"user_roles","publishedOnly":false,"requiresAuth":true},{"id":"supabase-table_practices","name":"practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practices","publishedOnly":true,"requiresAuth":false,"orderColumn":"sort_order","orderDirection":"asc"},{"id":"supabase-table_practice_attempts","name":"practice_attempts","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_attempts","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"},{"id":"supabase-table_practice_progress","name":"practice_progress","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_progress","publishedOnly":false,"requiresAuth":true,"orderColumn":"last_practiced_at","orderDirection":"desc"},{"id":"supabase-table_favorite_practices","name":"favorite_practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"favorite_practices","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"}]};
+    <section class="score-section" aria-labelledby="score-title"><div class="section-heading"><p class="eyebrow">3 · Resultado</p><h2 id="score-title">Tu comparación</h2></div><div class="score-card-grid">
+      <article data-builder-variable-display="" data-builder-variable-binding="{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;score_overall&quot;]}" data-builder-variable-label="Puntuación general · solo manos" data-builder-variable-format="progress" data-builder-variable-max="100" data-gjs-name="Tarjeta de variable" style="display:grid;gap:.65rem;width:100%;padding:1.2rem;box-sizing:border-box;color:#173f45;background:#fff;border:1px solid #d7e2df;border-radius:1rem;box-shadow:0 .6rem 1.5rem rgba(23,63,69,.08)">
+    <span data-builder-variable-display-label="" style="color:#607772;font:700 .78rem/1.3 Inter,ui-sans-serif,system-ui,sans-serif">Variable</span>
+    <strong data-builder-variable-display-value="" style="min-width:0;color:#173f45;font:800 clamp(1.4rem,4vw,2.2rem)/1.15 Inter,ui-sans-serif,system-ui,sans-serif;overflow-wrap:anywhere">Selecciona una variable</strong>
+    <progress data-builder-variable-display-progress="" hidden="" value="0" max="1" style="width:100%;height:.7rem;accent-color:#16847d"></progress>
+    <small data-builder-variable-display-status="" aria-live="polite" style="color:#78908b;font:500 .72rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Configura esta tarjeta en Propiedades.</small>
+  </article>
+      <article data-builder-variable-display="" data-builder-variable-binding="{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;score_pose&quot;]}" data-builder-variable-label="Postura · diagnóstico, no cuenta" data-builder-variable-format="progress" data-builder-variable-max="100" data-gjs-name="Tarjeta de variable" style="display:grid;gap:.65rem;width:100%;padding:1.2rem;box-sizing:border-box;color:#173f45;background:#fff;border:1px solid #d7e2df;border-radius:1rem;box-shadow:0 .6rem 1.5rem rgba(23,63,69,.08)">
+    <span data-builder-variable-display-label="" style="color:#607772;font:700 .78rem/1.3 Inter,ui-sans-serif,system-ui,sans-serif">Variable</span>
+    <strong data-builder-variable-display-value="" style="min-width:0;color:#173f45;font:800 clamp(1.4rem,4vw,2.2rem)/1.15 Inter,ui-sans-serif,system-ui,sans-serif;overflow-wrap:anywhere">Selecciona una variable</strong>
+    <progress data-builder-variable-display-progress="" hidden="" value="0" max="1" style="width:100%;height:.7rem;accent-color:#16847d"></progress>
+    <small data-builder-variable-display-status="" aria-live="polite" style="color:#78908b;font:500 .72rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Configura esta tarjeta en Propiedades.</small>
+  </article>
+      <article data-builder-variable-display="" data-builder-variable-binding="{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;score_left&quot;]}" data-builder-variable-label="Mano izquierda" data-builder-variable-format="progress" data-builder-variable-max="100" data-gjs-name="Tarjeta de variable" style="display:grid;gap:.65rem;width:100%;padding:1.2rem;box-sizing:border-box;color:#173f45;background:#fff;border:1px solid #d7e2df;border-radius:1rem;box-shadow:0 .6rem 1.5rem rgba(23,63,69,.08)">
+    <span data-builder-variable-display-label="" style="color:#607772;font:700 .78rem/1.3 Inter,ui-sans-serif,system-ui,sans-serif">Variable</span>
+    <strong data-builder-variable-display-value="" style="min-width:0;color:#173f45;font:800 clamp(1.4rem,4vw,2.2rem)/1.15 Inter,ui-sans-serif,system-ui,sans-serif;overflow-wrap:anywhere">Selecciona una variable</strong>
+    <progress data-builder-variable-display-progress="" hidden="" value="0" max="1" style="width:100%;height:.7rem;accent-color:#16847d"></progress>
+    <small data-builder-variable-display-status="" aria-live="polite" style="color:#78908b;font:500 .72rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Configura esta tarjeta en Propiedades.</small>
+  </article>
+      <article data-builder-variable-display="" data-builder-variable-binding="{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;score_right&quot;]}" data-builder-variable-label="Mano derecha" data-builder-variable-format="progress" data-builder-variable-max="100" data-gjs-name="Tarjeta de variable" style="display:grid;gap:.65rem;width:100%;padding:1.2rem;box-sizing:border-box;color:#173f45;background:#fff;border:1px solid #d7e2df;border-radius:1rem;box-shadow:0 .6rem 1.5rem rgba(23,63,69,.08)">
+    <span data-builder-variable-display-label="" style="color:#607772;font:700 .78rem/1.3 Inter,ui-sans-serif,system-ui,sans-serif">Variable</span>
+    <strong data-builder-variable-display-value="" style="min-width:0;color:#173f45;font:800 clamp(1.4rem,4vw,2.2rem)/1.15 Inter,ui-sans-serif,system-ui,sans-serif;overflow-wrap:anywhere">Selecciona una variable</strong>
+    <progress data-builder-variable-display-progress="" hidden="" value="0" max="1" style="width:100%;height:.7rem;accent-color:#16847d"></progress>
+    <small data-builder-variable-display-status="" aria-live="polite" style="color:#78908b;font:500 .72rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Configura esta tarjeta en Propiedades.</small>
+  </article>
+      <article data-builder-variable-display="" data-builder-variable-binding="{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;feedback&quot;]}" data-builder-variable-label="Retroalimentación" data-builder-variable-format="auto" data-builder-variable-max="100" data-gjs-name="Tarjeta de variable" hidden="" style="display:none;gap:.65rem;width:100%;padding:1.2rem;box-sizing:border-box;color:#173f45;background:#fff;border:1px solid #d7e2df;border-radius:1rem;box-shadow:0 .6rem 1.5rem rgba(23,63,69,.08)">
+    <span data-builder-variable-display-label="" style="color:#607772;font:700 .78rem/1.3 Inter,ui-sans-serif,system-ui,sans-serif">Variable</span>
+    <strong data-builder-variable-display-value="" style="min-width:0;color:#173f45;font:800 clamp(1.4rem,4vw,2.2rem)/1.15 Inter,ui-sans-serif,system-ui,sans-serif;overflow-wrap:anywhere">Selecciona una variable</strong>
+    <progress data-builder-variable-display-progress="" hidden="" value="0" max="1" style="width:100%;height:.7rem;accent-color:#16847d"></progress>
+    <small data-builder-variable-display-status="" aria-live="polite" style="color:#78908b;font:500 .72rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif">Configura esta tarjeta en Propiedades.</small>
+  </article>
+    </div></section>
+    <section class="save-attempt-card" data-builder-auth-visible="signed-in"><div><h2>Guarda tu progreso</h2><p>Se guardarán las puntuaciones y el resumen de la comparación, no el archivo de video.</p></div><button data-save-attempt="" disabled="" type="button" class="button primary" data-builder-flow-action="create-record" data-builder-flow-data-source="table-practice-attempts" data-builder-flow-context="record" data-builder-flow-owner-field="user_id" data-builder-flow-field-map="[{&quot;field&quot;:&quot;practice_id&quot;,&quot;runtimeValue&quot;:{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;practice_id&quot;]}},{&quot;field&quot;:&quot;score&quot;,&quot;runtimeValue&quot;:{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;score_overall&quot;]}},{&quot;field&quot;:&quot;mediapipe_result&quot;,&quot;runtimeValue&quot;:{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;attempt_result&quot;]}},{&quot;field&quot;:&quot;duration_seconds&quot;,&quot;runtimeValue&quot;:{&quot;key&quot;:&quot;js-lab::variables&quot;,&quot;path&quot;:[&quot;duration_seconds&quot;]}}]" data-builder-flow-success-message="Intento guardado en tu progreso.">Guardar intento</button></section>
+    <section class="save-attempt-card" data-builder-auth-visible="signed-out"><div><h2>Práctica como invitado</h2><p>Puedes completar la comparación. Inicia sesión para guardar el resultado.</p></div><button data-builder-flow-action="navigate" data-builder-flow-target="bienvenida" type="button" class="button secondary">Iniciar sesión</button></section>
+  </main><footer class="site-footer"><p>Proyecto educativo de Lengua de Señas Panameña · Medios de demostración pendientes de revisión experta.</p></footer></div>
+
+
+
+    <script>(function () {
+    const waitForStore = () => new Promise((resolve) => {
+      const find = () => window.__BUILDER_RUNTIME_VALUE_STORE__?.publish ? resolve(window.__BUILDER_RUNTIME_VALUE_STORE__) : setTimeout(find, 25);
+      find();
+    });
+    const parseContext = () => {
+      try { return JSON.parse(new URLSearchParams(location.search).get('context-record') || 'null'); }
+      catch { return null; }
+    };
+    const sessionFor = (projectUrl) => {
+      try { return JSON.parse(localStorage.getItem('builder-auth:' + new URL(projectUrl).hostname) || 'null'); }
+      catch { return null; }
+    };
+    const signedMediaUrl = async (source, session, value) => {
+      if (typeof value !== 'string' || !value) return '';
+      if (!value.startsWith('storage://')) return value;
+      const parts = value.slice('storage://'.length).split('/');
+      const bucket = parts.shift();
+      const objectPath = parts.map(encodeURIComponent).join('/');
+      const response = await fetch(source.projectUrl.replace(/\/$/, '') + '/storage/v1/object/sign/' + encodeURIComponent(bucket) + '/' + objectPath, {
+        method: 'POST',
+        headers: { apikey: source.publishableKey, Authorization: 'Bearer ' + (session?.access_token || source.publishableKey), 'Content-Type': 'application/json' },
+        body: JSON.stringify({ expiresIn: 3600 })
+      });
+      if (!response.ok) return '';
+      const result = await response.json();
+      return result.signedURL ? source.projectUrl.replace(/\/$/, '') + '/storage/v1' + result.signedURL : '';
+    };
+    const installReferenceOverlay = (video, canvas, frames) => {
+      if (!video || !canvas || !Array.isArray(frames) || !frames.length) return;
+      const context = canvas.getContext('2d');
+      const connections = {
+        pose: [[11,12],[11,13],[13,15],[12,14],[14,16],[11,23],[12,24],[23,24]],
+        hand: [[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]]
+      };
+      let animationFrame = 0;
+      const points = (groups) => Array.isArray(groups?.[0]) ? groups[0] : Array.isArray(groups) ? groups : [];
+      const render = () => {
+        const width = Math.max(1, Math.round(canvas.clientWidth));
+        const height = Math.max(1, Math.round(canvas.clientHeight));
+        if (canvas.width !== width || canvas.height !== height) { canvas.width = width; canvas.height = height; }
+        context.clearRect(0, 0, width, height);
+        const timeMs = video.currentTime * 1000;
+        let frame = frames[0];
+        for (const candidate of frames) {
+          if (Math.abs(candidate.t - timeMs) <= Math.abs(frame.t - timeMs)) frame = candidate;
+          else if (candidate.t > timeMs) break;
+        }
+        const sourceWidth = frame.width || video.videoWidth || 16;
+        const sourceHeight = frame.height || video.videoHeight || 9;
+        const scale = Math.min(width / sourceWidth, height / sourceHeight);
+        const drawWidth = sourceWidth * scale;
+        const drawHeight = sourceHeight * scale;
+        const offsetX = (width - drawWidth) / 2;
+        const offsetY = (height - drawHeight) / 2;
+        const map = (point) => [offsetX + Number(point.x) * drawWidth, offsetY + Number(point.y) * drawHeight];
+        const drawGroup = (landmarks, links, color) => {
+          const group = points(landmarks);
+          context.strokeStyle = color;
+          context.lineWidth = 2;
+          for (const [from, to] of links) {
+            if (!group[from] || !group[to]) continue;
+            const a = map(group[from]); const b = map(group[to]);
+            context.beginPath(); context.moveTo(a[0], a[1]); context.lineTo(b[0], b[1]); context.stroke();
+          }
+          context.fillStyle = '#ffffff';
+          for (const point of group) {
+            const mapped = map(point);
+            context.beginPath(); context.arc(mapped[0], mapped[1], 2.3, 0, Math.PI * 2); context.fill();
+          }
+        };
+        drawGroup(frame.poseLandmarks, connections.pose, '#3dd6ee');
+        drawGroup(frame.leftHandLandmarks, connections.hand, '#46e6b0');
+        drawGroup(frame.rightHandLandmarks, connections.hand, '#ffd166');
+        if (!video.paused && !video.ended) animationFrame = requestAnimationFrame(render);
+      };
+      const start = () => { cancelAnimationFrame(animationFrame); render(); };
+      video.addEventListener('play', start);
+      video.addEventListener('seeked', render);
+      video.addEventListener('timeupdate', render);
+      video.addEventListener('loadedmetadata', render);
+      canvas.hidden = false;
+    };
+    const validReferenceSequences = (sequences, frameCount) => {
+      const valid = (frames, width) => Array.isArray(frames)
+        && frames.length === frameCount
+        && frames.every((frame) => Array.isArray(frame) && frame.length === width && frame.every(Number.isFinite));
+      return valid(sequences?.pose, 99) && valid(sequences?.leftHand, 63) && valid(sequences?.rightHand, 63);
+    };
+    const clickWhenReady = (selector, predicate) => {
+      const attempt = () => {
+        if (!predicate()) return;
+        const button = document.querySelector(selector);
+        if (button && !button.disabled && !button.dataset.autoExecuted) {
+          button.dataset.autoExecuted = 'true';
+          button.click();
+          return;
+        }
+        setTimeout(attempt, 100);
+      };
+      attempt();
+    };
+    document.addEventListener('DOMContentLoaded', async () => {
+      const store = await waitForStore();
+      const config = window.__BUILDER_NAVIGATION__;
+      const source = config?.dataSources?.find((item) => item.name === 'practices');
+      const context = parseContext();
+      const status = document.querySelector('[data-practice-pipeline-status]');
+      const save = document.querySelector('[data-save-attempt]');
+      const video = document.querySelector('[data-reference-video]');
+      const referencePlay = document.querySelector('[data-reference-play]');
+      const referencePlayStatus = document.querySelector('[data-reference-play-status]');
+      referencePlay?.addEventListener('click', async () => {
+        if (!video?.src) return;
+        if (!video.paused) {
+          video.pause();
+          return;
+        }
+        if (video.ended) video.currentTime = 0;
+        try {
+          await video.play();
+        } catch {
+          if (referencePlayStatus) referencePlayStatus.textContent = 'No se pudo reproducir el video.';
+        }
+      });
+      video?.addEventListener('play', () => {
+        if (referencePlay) referencePlay.textContent = 'Pausar referencia';
+        if (referencePlayStatus) referencePlayStatus.textContent = 'Reproduciendo con landmarks sincronizados.';
+      });
+      video?.addEventListener('pause', () => {
+        if (referencePlay) referencePlay.textContent = video.ended ? 'Ver de nuevo' : 'Ver referencia';
+        if (referencePlayStatus) referencePlayStatus.textContent = video.ended ? 'Referencia terminada.' : 'Referencia pausada.';
+      });
+      if (!source || !context?.recordId) {
+        if (status) status.textContent = 'No se encontró la práctica seleccionada.';
+        return;
+      }
+      try {
+        const session = sessionFor(source.projectUrl);
+        const response = await fetch(source.projectUrl.replace(/\/$/, '') + '/rest/v1/' + encodeURIComponent(source.table) + '?id=eq.' + encodeURIComponent(context.recordId) + '&select=id,media_url,mediapipe_reference', {
+          headers: { apikey: source.publishableKey, Authorization: 'Bearer ' + (session?.access_token || source.publishableKey) }
+        });
+        if (!response.ok) throw new Error('No se pudo cargar la referencia de esta práctica.');
+        const record = (await response.json())[0];
+        const template = typeof record?.mediapipe_reference === 'string' ? JSON.parse(record.mediapipe_reference) : record?.mediapipe_reference;
+        if (!Array.isArray(template?.landmarkFrames) || !template.landmarkFrames.length) throw new Error('Esta práctica necesita una referencia nueva con landmark frames.');
+        if (template.version === 4 && !validReferenceSequences(template.pythonSequences, template.landmarkFrames.length)) throw new Error('Las secuencias DTW guardadas están incompletas. Vuelve a procesar la referencia.');
+        const mediaUrl = await signedMediaUrl(source, session, record.media_url);
+        const referenceBundle = { ...template, recordId: record.id, mediaUrl };
+        store.publish({ sourceId: 'reference-bundle', outputId: 'reference_bundle', type: 'json', value: referenceBundle });
+        store.publish({ sourceId: 'practice-context', outputId: 'practice_context', type: 'json', value: { practice_id: record.id, duration_seconds: 0 } });
+        if (video && mediaUrl) {
+          video.src = mediaUrl;
+          video.hidden = false;
+          installReferenceOverlay(video, document.querySelector('[data-reference-overlay]'), referenceBundle.landmarkFrames);
+          if (referencePlay) referencePlay.disabled = false;
+          if (referencePlayStatus) referencePlayStatus.textContent = 'Lista para reproducir.';
+        }
+        if (status) status.textContent = 'Referencia lista. Graba tu intento cuando quieras.';
+      } catch (error) {
+        if (status) status.textContent = error instanceof Error ? error.message : 'No se pudo preparar la práctica.';
+        if (referencePlayStatus) referencePlayStatus.textContent = 'No se pudo cargar la referencia.';
+      }
+      let analysisStartedAt = Date.now();
+      document.addEventListener('builder:runtime-value', (event) => {
+        const detail = event.detail || {};
+        if (detail.sourceId === 'learner-motion') {
+          const pythonRun = document.querySelector('[data-builder-python-lab-run]');
+          const jsRun = document.querySelector('[data-builder-js-lab-run]');
+          if (pythonRun) delete pythonRun.dataset.autoExecuted;
+          if (jsRun) delete jsRun.dataset.autoExecuted;
+          if (save) save.disabled = true;
+          const contextValue = store.read('practice-context::practice_context')?.value || {};
+          store.publish({ sourceId: 'practice-context', outputId: 'practice_context', type: 'json', value: { ...contextValue, duration_seconds: Math.max(1, Math.round((Date.now() - analysisStartedAt) / 1000)) } });
+          if (status) status.textContent = 'Landmarks listos. Preparando la comparación…';
+          clickWhenReady('[data-builder-python-lab-run]', () => Boolean(store.read('reference-bundle::reference_bundle') && store.read('learner-motion::learner_video_results')));
+        }
+        if (detail.sourceId === 'python-lab') {
+          if (status) status.textContent = 'Secuencias listas. Calculando la similitud…';
+          clickWhenReady('[data-builder-js-lab-run]', () => Boolean(store.read('python-lab::variables')));
+        }
+        if (detail.sourceId === 'js-lab') {
+          if (save) save.disabled = false;
+          if (status) status.textContent = 'Comparación terminada. Ya puedes guardar el intento.';
+        }
+      });
+      document.querySelector('[data-motion-start]')?.addEventListener('click', () => { analysisStartedAt = Date.now(); });
+      const exportedSaveAction = config?.dataActions?.some((action) => action.pageId === 'detalle' && action.action === 'create');
+      if (save && !exportedSaveAction) {
+        save.addEventListener('click', async () => {
+          const attemptsSource = config?.dataSources?.find((item) => item.name === 'practice_attempts');
+          const session = attemptsSource ? sessionFor(attemptsSource.projectUrl) : null;
+          const variables = store.read('js-lab::variables')?.value;
+          if (!attemptsSource || !session?.access_token || !session?.user?.id || !variables) {
+            if (status) status.textContent = 'Inicia sesión y completa la comparación antes de guardar.';
+            return;
+          }
+          save.disabled = true;
+          if (status) status.textContent = 'Guardando tu intento…';
+          try {
+            const response = await fetch(attemptsSource.projectUrl.replace(/\/$/, '') + '/rest/v1/' + encodeURIComponent(attemptsSource.table), {
+              method: 'POST',
+              headers: {
+                apikey: attemptsSource.publishableKey,
+                Authorization: 'Bearer ' + session.access_token,
+                'Content-Type': 'application/json',
+                Prefer: 'return=minimal'
+              },
+              body: JSON.stringify({
+                user_id: session.user.id,
+                practice_id: variables.practice_id,
+                score: variables.score_overall,
+                feedback: variables.feedback,
+                mediapipe_result: variables.attempt_result,
+                duration_seconds: variables.duration_seconds
+              })
+            });
+            if (!response.ok) throw new Error((await response.text()) || 'No se pudo guardar el intento.');
+            save.textContent = 'Intento guardado';
+            if (status) status.textContent = 'Intento guardado en tu progreso.';
+          } catch (error) {
+            save.disabled = false;
+            if (status) status.textContent = error instanceof Error ? error.message : 'No se pudo guardar el intento.';
+          }
+        });
+      }
+    });
+  }());</script>
+
+<script data-builder-config="true">window.__BUILDER_NAVIGATION__ = {"connections":[{"id":"inicio-flow-1","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"inicio-flow-2","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"inicio-flow-3","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"inicio-flow-6","sourcePage":"inicio","elementId":"inicio::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"inicio-flow-8","sourcePage":"inicio","elementId":"inicio::div:1/main:1/section:2/div:2/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"catalogo-flow-1","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"catalogo-flow-2","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"catalogo-flow-3","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"catalogo-flow-6","sourcePage":"catalogo","elementId":"catalogo::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"catalogo-flow-7","sourcePage":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1","event":"click","action":"navigate","targetPage":"detalle","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"catalogo-flow-8","sourcePage":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/button:1","event":"click","action":"navigate","targetPage":"detalle","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"detalle-flow-1","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"detalle-flow-2","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"detalle-flow-3","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"detalle-flow-6","sourcePage":"detalle","elementId":"detalle::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"detalle-flow-7","sourcePage":"detalle","elementId":"detalle::div:1/main:1/header:1/button:1","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"resultados-flow-1","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"resultados-flow-2","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"resultados-flow-3","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"resultados-flow-6","sourcePage":"resultados","elementId":"resultados::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"gestion-flow-1","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"gestion-flow-2","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"gestion-flow-3","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"gestion-flow-6","sourcePage":"gestion","elementId":"gestion::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion"},{"id":"gestion-flow-7","sourcePage":"gestion","elementId":"gestion::div:1/main:1/section:1/button:1","event":"click","action":"navigate","targetPage":"editor-practica","clearContext":true},{"id":"gestion-flow-8","sourcePage":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/button:1","event":"click","action":"navigate","targetPage":"editor-practica","context":{"record":{"dataSourceId":"supabase-table_practices","recordId":"$record.id"}}},{"id":"editor-practica-flow-1","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"editor-practica-flow-2","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:1","event":"click","action":"navigate","targetPage":"inicio"},{"id":"editor-practica-flow-3","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:2","event":"click","action":"navigate","targetPage":"catalogo"},{"id":"editor-practica-flow-6","sourcePage":"editor-practica","elementId":"editor-practica::div:1/div:1/header:1/nav:1/button:5","event":"click","action":"navigate","targetPage":"gestion","clearContext":true}],"currentPage":"detalle","pageUrls":{"bienvenida":"bienvenida.html","inicio":"inicio.html","catalogo":"catalogo.html","detalle":"detalle.html","resultados":"resultados.html","gestion":"gestion.html","editor-practica":"editor-practica.html"},"transport":"location","dataSources":[{"id":"supabase-table_practices","name":"practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practices","publishedOnly":true,"requiresAuth":false,"orderColumn":"sort_order","orderDirection":"asc"},{"id":"supabase-table_practice_attempts","name":"practice_attempts","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_attempts","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"}],"bindings":[{"id":"inicio-binding-2","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"score"},{"id":"inicio-binding-3","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/p:1/span:2","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"duration_seconds"},{"id":"inicio-binding-4","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1/div:2/small:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"created_at"},{"id":"catalogo-binding-1","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"difficulty"},{"id":"catalogo-binding-2","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/div:1/span:2/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"estimated_minutes"},{"id":"catalogo-binding-3","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/h2:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"catalogo-binding-4","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1/p:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"detalle-binding-1","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/h1:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"detalle-binding-2","pageId":"detalle","elementId":"detalle::div:1/main:1/header:1/div:1/p:2","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"resultados-binding-1","pageId":"resultados","elementId":"resultados::div:1/main:1/section:1/div:1/article:1/div:1/p:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"feedback"},{"id":"resultados-binding-2","pageId":"resultados","elementId":"resultados::div:1/main:1/section:1/div:1/article:1/div:1/small:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"created_at"},{"id":"resultados-binding-3","pageId":"resultados","elementId":"resultados::div:1/main:1/section:1/div:1/article:1/div:2/strong:1/span:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practice_attempts","sourceMode":"context","field":"score"},{"id":"gestion-binding-1","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/h2:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"gestion-binding-2","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1/p:1","target":"text","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"editor-practica-binding-1","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/input:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"title"},{"id":"editor-practica-binding-2","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/textarea:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"description"},{"id":"editor-practica-binding-3","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:1/select:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"difficulty"},{"id":"editor-practica-binding-4","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:1/div:1/div:1/label:2/input:1","target":"value","contextKey":"record","dataSourceId":"supabase-table_practices","sourceMode":"context","field":"estimated_minutes"}],"repeaters":[{"id":"inicio-repeater-1","pageId":"inicio","elementId":"inicio::div:1/main:1/section:2/div:1/article:1","dataSourceId":"supabase-table_practice_attempts","itemContext":"record","pageSize":1,"emptyMessage":"Todavía no tienes actividad. Revisa el catálogo para comenzar.","errorMessage":"No pudimos cargar tu actividad. Intenta nuevamente."},{"id":"catalogo-repeater-1","pageId":"catalogo","elementId":"catalogo::div:1/main:1/section:2/div:1/article:1","dataSourceId":"supabase-table_practices","itemContext":"record","pageSize":6,"pagination":true,"emptyMessage":"Todavía no hay prácticas disponibles.","errorMessage":"No pudimos cargar las prácticas. Intenta nuevamente."},{"id":"resultados-repeater-1","pageId":"resultados","elementId":"resultados::div:1/main:1/section:1/div:1/article:1","dataSourceId":"supabase-table_practice_attempts","itemContext":"record","pageSize":10,"emptyMessage":"Todavía no tienes intentos guardados.","errorMessage":"No pudimos cargar tus resultados."},{"id":"gestion-repeater-1","pageId":"gestion","elementId":"gestion::div:1/main:1/section:2/article:1","dataSourceId":"supabase-table_practices","itemContext":"record","pageSize":12,"pagination":true,"emptyMessage":"Todavía no has creado prácticas.","errorMessage":"No pudimos cargar tus prácticas. Intenta nuevamente.","userFilterColumn":"created_by","includeUnpublished":true}],"authentication":{"provider":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","loginPage":"bienvenida","afterLoginPage":"inicio","afterLogoutPage":"bienvenida"},"pageAccess":{"bienvenida":"guestOnly","inicio":"authenticated","catalogo":"public","detalle":"public","resultados":"authenticated","gestion":"authenticated","editor-practica":"authenticated"},"pageRoles":{}};
+</script><script data-builder-runtime="true" src="../builder-runtime/navigation.js"></script><script data-builder-runtime-values="true" src="../builder-runtime/runtime-values.js"></script><script data-builder-python-config="true">window.__BUILDER_PYTHON_LAB__={"assetsBase":new URL("../pyodide/",document.baseURI).href,"libraries":[]};</script><script data-builder-python-runtime="true" src="../builder-runtime/python.js"></script><script data-builder-function-runtime="true" src="../builder-runtime/functions.js"></script><script data-motion-config="true">window.__MOTION_ANALYSIS__ = {"activities":[{"id":"detalle-motion-1","runtimeSourceId":"learner-motion","runtimeOutputId":"learner_video_results","pageId":"detalle","elementId":"detalle::div:1/main:1/section:1/article:2/section:1","mode":"analyze","componentType":"analyze","input":{"type":"camera","durationMs":10000,"facingMode":"user","continuous":true},"reference":{"type":"none"},"presentation":{"referenceDisplay":"video-reference","showResults":false},"detector":{"provider":"mediapipe","task":"holistic-landmarker","modelUrl":"https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task","delegate":"auto","minConfidence":0.5,"landmarks":{"hands":true,"pose":true,"face":false}},"evaluator":{"type":"quality"},"processing":{"checkpointReduction":true,"smoothing":3},"referenceOutput":{"type":"download"}},{"id":"editor-practica-motion-1","pageId":"editor-practica","elementId":"editor-practica::div:1/main:1/form:1/section:2/div:2/section:1","mode":"reference","componentType":"compare","input":{"type":"camera","durationMs":10000,"facingMode":"user"},"reference":{"type":"none"},"presentation":{"referenceDisplay":"video-reference","showResults":false},"detector":{"provider":"mediapipe","task":"holistic-landmarker","modelUrl":"https://storage.googleapis.com/mediapipe-models/holistic_landmarker/holistic_landmarker/float16/1/holistic_landmarker.task","delegate":"auto","minConfidence":0.5,"landmarks":{"hands":true,"pose":true,"face":true}},"evaluator":{"type":"sequence","passingScore":75},"processing":{"checkpointReduction":true,"smoothing":3},"referenceOutput":{"type":"form","selector":"[data-motion-template-field]"}}],"authentication":{"provider":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","loginPage":"bienvenida","afterLoginPage":"inicio","afterLogoutPage":"bienvenida"},"currentPage":"detalle","dataSources":[{"id":"supabase-table_practices","name":"practices","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practices","publishedOnly":true,"requiresAuth":false,"orderColumn":"sort_order","orderDirection":"asc"},{"id":"supabase-table_practice_attempts","name":"practice_attempts","type":"supabase","projectUrl":"https://bkvwfmofndkxdhfgtevb.supabase.co","publishableKey":"sb_publishable_2CuZ0WhI-cE-mZ0rzfn7bA_3tyKnxWK","table":"practice_attempts","publishedOnly":false,"requiresAuth":true,"orderColumn":"created_at","orderDirection":"desc"}]};
 </script><script data-motion-runtime="true" src="../motion-runtime/analysis.js"></script></body></html>

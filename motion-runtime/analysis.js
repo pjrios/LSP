@@ -436,6 +436,18 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 	const runtimeConfig = config;
 	const detectors = new Map();
 	let mediaPipeTimestamp = 0;
+	function publishAnalyzeLandmarks(activity, landmarkFrames) {
+		if (activity.mode !== "analyze" || !activity.runtimeSourceId) return;
+		const detail = {
+			sourceId: activity.runtimeSourceId,
+			outputId: activity.runtimeOutputId || runtimeHelpers.landmarkFramesOutputId,
+			type: "json",
+			value: landmarkFrames
+		};
+		const store = runtimeWindow[runtimeHelpers.runtimeValueStoreProperty];
+		if (typeof store?.publish === "function") store.publish(detail);
+		else runtimeDocument.dispatchEvent(new CustomEvent(runtimeHelpers.runtimeValueEventName, { detail }));
+	}
 	function activityFeatures(activity) {
 		if (activity.detector.task === "holistic-landmarker") {
 			const selection = activity.detector.landmarks;
@@ -444,7 +456,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				pose: selection?.pose !== false,
 				face: selection?.face === true
 			};
-		}
+		};
 		return {
 			hands: activity.detector.task === "hand-landmarker" || activity.detector.task === "gesture-recognizer",
 			pose: activity.detector.task === "pose-landmarker",
@@ -1005,10 +1017,13 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			const parsed = typeof value === "string" ? JSON.parse(value) : value;
 			if (!parsed || typeof parsed !== "object") return undefined;
 			const record = parsed;
-			if (record.version !== 3 || typeof record.detectorTask !== "string") return undefined;
-			const frames = record.frames;
-			if (!Array.isArray(frames) || !frames.length) return undefined;
+			if (record.version !== 3 && record.version !== 4 || typeof record.detectorTask !== "string") return undefined;
+			const frames = Array.isArray(record.frames) ? record.frames : [];
 			const landmarkFrames = Array.isArray(record.landmarkFrames) ? record.landmarkFrames.filter((frame) => Boolean(frame && typeof frame === "object" && Number.isFinite(frame.t) && Number.isFinite(frame.width) && Number.isFinite(frame.height))) : [];
+			const validSequence = (values, width) => Array.isArray(values) && values.length === landmarkFrames.length && values.every((frame) => Array.isArray(frame) && frame.length === width && frame.every(Number.isFinite));
+			const pythonSequences = validSequence(record.pythonSequences?.pose, 99) && validSequence(record.pythonSequences?.leftHand, 63) && validSequence(record.pythonSequences?.rightHand, 63) ? record.pythonSequences : undefined;
+			if (record.version === 3 && !frames.length) return undefined;
+			if (record.version === 4 && (!landmarkFrames.length || !pythonSequences)) return undefined;
 			const sourceSegment = record.sourceSegment && typeof record.sourceSegment === "object" && Number.isFinite(record.sourceSegment.startSeconds) && Number.isFinite(record.sourceSegment.endSeconds) ? record.sourceSegment : undefined;
 			const sourceCrop = record.sourceCrop && typeof record.sourceCrop === "object" && Number.isFinite(record.sourceCrop.x) && Number.isFinite(record.sourceCrop.y) && Number.isFinite(record.sourceCrop.width) && Number.isFinite(record.sourceCrop.height) ? record.sourceCrop : undefined;
 			const requiredHand = record.requiredHand === "left" || record.requiredHand === "right" || record.requiredHand === "both" || record.requiredHand === "either" ? record.requiredHand : "either";
@@ -1019,17 +1034,24 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				scored: stage.scored !== false
 			})).sort((left, right) => left.progress - right.progress) : [];
 			return {
-				durationMs: Number.isFinite(record.durationMs) ? Number(record.durationMs) : frames.at(-1)?.t ?? 0,
+				durationMs: Number.isFinite(record.durationMs) ? Number(record.durationMs) : frames.at(-1)?.t ?? landmarkFrames.at(-1)?.t ?? 0,
 				frames,
 				detectorTask: record.detectorTask,
 				landmarkFrames,
+				pythonSequences,
 				requiredHand,
 				sourceCrop,
 				sourceSegment,
 				storedClip: record.storedClip === true,
 				storedClipDurationMs: Number.isFinite(record.storedClipDurationMs) ? Number(record.storedClipDurationMs) : undefined,
 				stages,
-				version: 3
+				sequenceProcessor: pythonSequences ? {
+					engine: "pyodide",
+					language: "python",
+					library: "landmark_utils",
+					version: 1
+				} : undefined,
+				version: record.version
 			};
 		} catch {
 			return undefined;
@@ -1282,6 +1304,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const replayButton = root.querySelector("[data-motion-replay]");
 		const videoSourceControls = root.querySelector("[data-motion-video-source]");
 		const fileInput = root.querySelector("[data-motion-file]");
+		const fileInputLabel = root.querySelector("[data-motion-file-label]");
 		const cropBox = root.querySelector("[data-motion-crop-box]");
 		const cropEditButton = root.querySelector("[data-motion-crop-edit]");
 		const cropResetButton = root.querySelector("[data-motion-crop-reset]");
@@ -1292,13 +1315,16 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const overlay = root.querySelector("[data-motion-overlay]");
 		const placeholder = root.querySelector("[data-motion-placeholder]");
 		const status = root.querySelector("[data-motion-status]");
-		const results = root.querySelector("[data-motion-results]");
-		const overall = root.querySelector("[data-motion-overall]");
-		const scores = root.querySelector("[data-motion-scores]");
-		const feedback = root.querySelector("[data-motion-feedback]");
-		const stageResults = root.querySelector("[data-motion-stage-results]");
-		const stageScores = root.querySelector("[data-motion-stage-scores]");
-		const download = root.querySelector("[data-motion-download]");
+		const readyOutput = root.querySelector("[data-motion-ready]");
+		const resultsKey = root.getAttribute("data-motion-results-key");
+		const linkedResultsDock = resultsKey ? [...runtimeDocument.querySelectorAll("[data-motion-results-dock]")].find((candidate) => candidate.getAttribute("data-motion-results-dock") === resultsKey) : undefined;
+		const results = root.querySelector("[data-motion-results]") ?? linkedResultsDock?.querySelector("[data-motion-results]");
+		const overall = results?.querySelector("[data-motion-overall]");
+		const scores = results?.querySelector("[data-motion-scores]");
+		const feedback = results?.querySelector("[data-motion-feedback]");
+		const stageResults = results?.querySelector("[data-motion-stage-results]");
+		const stageScores = results?.querySelector("[data-motion-stage-scores]");
+		const download = results?.querySelector("[data-motion-download]");
 		const storedTemplateField = activity.mode === "reference" ? runtimeDocument.querySelector("[data-motion-template-field]") : undefined;
 		const requiredHandSelect = activity.mode === "reference" ? root.closest(".movement-reference-required")?.querySelector("[data-motion-required-hand]") : undefined;
 		const sourceModeButtons = activity.mode === "reference" ? [...root.closest(".movement-reference-required")?.querySelectorAll("[data-motion-source-mode]") ?? []] : [];
@@ -1314,22 +1340,70 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const referenceEmpty = workspace?.querySelector("[data-motion-reference-empty]");
 		const referenceReplay = workspace?.querySelector("[data-motion-reference-replay]");
 		const referencePreviewStatus = workspace?.querySelector("[data-motion-reference-status]");
-		const comparisonContainer = activity.mode === "compare" ? workspace?.parentElement : undefined;
+		const comparisonContainer = activity.mode === "compare" ? workspace?.parentElement ?? root.closest("[data-builder-layout-row]")?.parentElement : undefined;
 		const syncReplayButton = comparisonContainer?.querySelector("[data-motion-sync-replay]");
 		const syncReplayStatus = comparisonContainer?.querySelector("[data-motion-sync-status]");
-		const resultsDock = comparisonContainer?.querySelector("[data-motion-results-dock]");
-		if (!button || !video || !status || !results || !overall || !scores || !feedback) continue;
-		if (activity.mode === "compare" && resultsDock) resultsDock.append(results);
-		button.textContent = activity.mode === "reference" ? "Iniciar grabación" : activity.mode === "analyze" ? "Iniciar análisis" : "Comenzar comparación";
-		if (stopButton) stopButton.textContent = activity.mode === "compare" ? "Detener y comparar" : activity.mode === "analyze" ? "Detener análisis" : "Detener y guardar";
-		if (replayButton) replayButton.textContent = activity.mode === "compare" ? "Ver mi intento" : "Reproducir referencia";
-		if (videoSourceControls) videoSourceControls.hidden = activity.mode !== "reference";
-		status.textContent = activity.mode === "compare" && activity.reference.type === "none" ? "Selecciona una referencia en Movimiento." : "Listo para comenzar.";
+		const resultsDock = linkedResultsDock ?? comparisonContainer?.querySelector("[data-motion-results-dock]");
+		if (!button || !video || !status) continue;
+		if (activity.mode !== "analyze" && (!results || !overall || !scores || !feedback)) continue;
+		if (activity.mode === "compare" && resultsDock && results) resultsDock.append(results);
+		const showResults = activity.presentation.showResults || activity.mode === "compare" && Boolean(resultsDock);
+		button.textContent = activity.mode === "reference" ? "Iniciar grabación" : activity.mode === "analyze" ? "Iniciar captura" : "Iniciar intento";
+		if (stopButton) stopButton.textContent = activity.mode === "compare" ? "Detener y comparar" : activity.mode === "analyze" ? "Detener y finalizar" : "Detener y guardar";
+		if (replayButton) replayButton.textContent = activity.mode === "compare" ? "Ver mi intento" : activity.mode === "analyze" ? "Ver análisis" : "Reproducir referencia";
+		const analyzesUploadedVideo = activity.mode === "analyze" && activity.input.type === "upload";
+		const autoAnalyzesReferenceUpload = activity.mode === "reference" && (root.dataset.motionAutoAnalyze === "true" || runtimeConfig.currentPage === "editor-practica");
+		if (autoAnalyzesReferenceUpload) {
+			const simplifiedReferenceSection = root.closest(".movement-reference-required");
+			const simplifiedOptionsBar = simplifiedReferenceSection?.querySelector("[data-motion-source-choice]")?.closest(".reference-options-bar");
+			if (simplifiedOptionsBar) simplifiedOptionsBar.style.display = "none";
+			const simplifiedRequiredHand = simplifiedReferenceSection?.querySelector("[data-motion-required-hand]")?.closest("label");
+			if (simplifiedRequiredHand) simplifiedRequiredHand.style.display = "none";
+			const simplifiedManualStages = simplifiedReferenceSection?.querySelector("[data-motion-stage-editor]");
+			if (simplifiedManualStages) simplifiedManualStages.style.display = "none";
+			const simplifiedHeading = simplifiedReferenceSection?.closest('[data-practice-step="reference"]')?.querySelector("#movement-reference-title");
+			if (simplifiedHeading) simplifiedHeading.textContent = "Video de referencia";
+			const simplifiedBadge = simplifiedHeading?.parentElement?.querySelector(".required-badge");
+			if (simplifiedBadge) simplifiedBadge.textContent = "Requerido";
+			const simplifiedFormStatus = simplifiedReferenceSection?.closest("form")?.querySelector("[data-builder-mutation-status]");
+			if (simplifiedFormStatus && !storedTemplateField?.value.trim()) simplifiedFormStatus.textContent = "Sube un video antes de guardar.";
+			const simplifiedPlaceholderTitle = placeholder?.querySelector("strong");
+			const simplifiedPlaceholderHelp = placeholder?.querySelector("small");
+			if (simplifiedPlaceholderTitle) simplifiedPlaceholderTitle.textContent = "Sube el video de referencia";
+			if (simplifiedPlaceholderHelp) simplifiedPlaceholderHelp.textContent = "El movimiento se analizará automáticamente y quedará listo para comparar.";
+			if (videoSourceControls) {
+				videoSourceControls.hidden = false;
+				videoSourceControls.style.display = "block";
+				videoSourceControls.style.paddingTop = "0";
+				videoSourceControls.style.borderTop = "0";
+				videoSourceControls.querySelectorAll("label:not(:first-child), .motion-crop-actions").forEach((element) => { element.style.display = "none"; });
+			}
+			button.hidden = true;
+		}
+		if (videoSourceControls) videoSourceControls.hidden = activity.mode !== "reference" && !analyzesUploadedVideo;
+		if (fileInputLabel) fileInputLabel.textContent = analyzesUploadedVideo ? "Video para analizar" : "Video de referencia";
+		if (analyzesUploadedVideo) button.hidden = !fileInput?.files?.[0];
+		root.dataset.motionRuntimeState = analyzesUploadedVideo ? "awaiting-input" : "idle";
+		status.textContent = activity.mode === "compare" && activity.reference.type === "none" ? "Selecciona una referencia en Movimiento." : analyzesUploadedVideo ? "Selecciona un archivo de video para analizar." : "Listo para comenzar.";
+		const setAnalyzeState = (state) => {
+			if (activity.mode !== "analyze") return;
+			root.dataset.motionRuntimeState = state;
+			if (readyOutput) readyOutput.hidden = state !== "ready";
+			if (state === "idle") button.textContent = "Iniciar captura";
+			if (state === "awaiting-input") button.textContent = "Analizar video";
+			if (state === "preparing") button.textContent = "Preparando…";
+			if (state === "capturing") button.textContent = "Capturando…";
+			if (state === "processing") button.textContent = "Analizando…";
+			if (state === "ready") button.textContent = analyzesUploadedVideo ? "Analizar de nuevo" : "Analizar otra grabación";
+			if (state === "error") button.textContent = analyzesUploadedVideo ? "Intentar de nuevo" : "Reintentar captura";
+		};
 		let stream;
 		let downloadUrl;
 		let stopRequested = false;
 		let recordedLandmarkFrames = [];
 		let replayGeneration = 0;
+		let analyzeReviewPaused = false;
+		let analyzeReviewRunning = false;
 		let referenceReplayGeneration = 0;
 		let selectedVideoUrl;
 		let learnerRecordingUrl;
@@ -1344,7 +1418,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		let cropInteraction;
 		let editableStages = [];
 		let timelineCursorProgress = 0;
-		let referenceSourceMode = "camera";
+		let referenceSourceMode = autoAnalyzesReferenceUpload ? "video" : "camera";
 		let displayedReferenceFrame;
 		const preparedClipInput = fileInput;
 		const referenceStage = referencePreview?.parentElement;
@@ -1415,6 +1489,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const ResizeObserverConstructor = runtimeWindow.ResizeObserver;
 		const referenceResizeObserver = referenceStage && typeof ResizeObserverConstructor === "function" ? new ResizeObserverConstructor(redrawDisplayedReference) : undefined;
 		if (referenceStage) referenceResizeObserver?.observe(referenceStage);
+		const inputOverlayFit = () => runtimeWindow.getComputedStyle(video).objectFit === "cover" ? "cover" : "contain";
 		const selectedSourceCrop = () => manualCrop;
 		const applyVideoCrop = (element, crop) => {
 			if (!crop) {
@@ -1468,7 +1543,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			const frame = recordedLandmarkFrames[frameIndex];
 			if (frame && overlay) {
 				overlay.hidden = false;
-				drawHolisticOverlay(overlay, frame.width, frame.height, frame, activityFeatures(activity));
+				drawHolisticOverlay(overlay, frame.width, frame.height, frame, activityFeatures(activity), inputOverlayFit());
 				if (placeholder) placeholder.hidden = true;
 			};
 			const template = stageTemplate();
@@ -1483,6 +1558,14 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		};
 		const renderStageEditor = (stages, selectedStageId) => {
 			if (!stageEditor || !stageList) return;
+			if (autoAnalyzesReferenceUpload) {
+				editableStages = [];
+				stageEditor.hidden = true;
+				stageEditor.style.display = "none";
+				stageList.replaceChildren();
+				motionInput?.querySelector("[data-motion-stage-overlay]")?.remove();
+				return;
+			};
 			editableStages = stages.map((stage) => ({
 				id: stage.id,
 				label: stage.label,
@@ -1662,7 +1745,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			if (stageList) stageList.replaceChildren();
 			motionInput?.querySelector("[data-motion-stage-overlay]")?.remove();
 			editableStages = [];
-			results.hidden = true;
+			if (results) results.hidden = true;
 		};
 		const containedVideoBounds = () => {
 			if (!motionInput) return undefined;
@@ -1867,7 +1950,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			video.hidden = true;
 			if (overlay) {
 				overlay.hidden = false;
-				drawHolisticOverlay(overlay, firstFrame.width, firstFrame.height, firstFrame, activityFeatures(activity));
+				drawHolisticOverlay(overlay, firstFrame.width, firstFrame.height, firstFrame, activityFeatures(activity), inputOverlayFit());
 			};
 			if (placeholder) placeholder.hidden = true;
 			if (replayButton) replayButton.hidden = false;
@@ -1905,38 +1988,26 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				const displayedTime = manualStop ? Math.floor(elapsed / 1e3) : Math.max(1, Math.ceil((durationMs - elapsed) / 1e3));
 				if (displayedTime !== displayedSecond) {
 					displayedSecond = displayedTime;
-					status.textContent = activity.mode === "analyze" ? `Analizando en vivo… ${displayedTime} s` : `Grabando movimiento… ${displayedTime} s`;
+					status.textContent = activity.mode === "analyze" ? `Capturando landmarks… ${displayedTime} s` : `Grabando movimiento… ${displayedTime} s`;
 				};
 				const result = await detectFrame(activity, source);
 				visionResults.push(result);
 				if (overlay) {
 					overlay.hidden = false;
-					drawHolisticOverlay(overlay, source.videoWidth || 640, source.videoHeight || 480, result, activityFeatures(activity));
+					drawHolisticOverlay(overlay, source.videoWidth || 640, source.videoHeight || 480, result, activityFeatures(activity), inputOverlayFit());
 				};
 				const frame = featureFrame(result, elapsed, activityFeatures(activity));
 				frames.push(frame);
 				landmarkFrames.push(replayLandmarkFrame(result, source, elapsed));
-				if (activity.mode === "analyze") {
-					while (frames.length > 120) frames.shift();
-					while (landmarkFrames.length > 120) landmarkFrames.shift();
-					while (visionResults.length > 120) visionResults.shift();
-					if (elapsed - lastLiveUpdate >= 250) {
-						lastLiveUpdate = elapsed;
-						const live = evaluateVisionResults(activity, [frame], [result]);
-						overall.textContent = `${live.overallScore}%`;
-						scores.replaceChildren(...Object.entries(live.scores).map(([label, score]) => {
-							const item = runtimeDocument.createElement("div");
-							item.className = "motion-results__score";
-							item.innerHTML = `<small>${label}</small><strong>${score}%</strong>`;
-							return item;
-						}));
-						feedback.textContent = live.feedback;
-						results.hidden = !activity.presentation.showResults;
-						root.dispatchEvent(new CustomEvent("motion:live-result", {
-							bubbles: true,
-							detail: live
-						}));
-					}
+				if (activity.mode === "analyze" && elapsed - lastLiveUpdate >= 250) {
+					lastLiveUpdate = elapsed;
+					root.dispatchEvent(new CustomEvent("motion:capture-progress", {
+						bubbles: true,
+						detail: {
+							elapsedMs: elapsed,
+							frameCount: landmarkFrames.length
+						}
+					}));
 				};
 				await new Promise((resolve) => runtimeWindow.setTimeout(resolve, 60));
 			};
@@ -1960,7 +2031,6 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				throw new Error("Elige un tramo válido del video.");
 			};
 			const segmentDuration = endSeconds - startSeconds;
-			const sampleCount = Math.max(8, Math.min(48, Math.ceil(segmentDuration * 6)));
 			const crop = selectedSourceCrop();
 			const frames = [];
 			const landmarkFrames = [];
@@ -1968,21 +2038,66 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			video.hidden = false;
 			applyVideoCrop(video, crop);
 			if (placeholder) placeholder.hidden = true;
-			for (let index = 0; index < sampleCount; index += 1) {
-				const progress = index / Math.max(1, sampleCount - 1);
-				const sourceTime = startSeconds + segmentDuration * progress;
-				const elapsed = segmentDuration * progress * 1e3;
-				status.textContent = `Analizando video… ${Math.round(progress * 100)}%`;
-				await seek(source, Math.min(sourceTime, Math.max(0, duration - .01)));
+			if (typeof source.requestVideoFrameCallback !== "function") {
+				throw new Error("Este navegador no permite recorrer todos los frames del video. Usa una versión reciente de Chrome.");
+			};
+			const analyzeCurrentFrame = async (sourceTime) => {
+				const elapsed = Math.max(0, sourceTime - startSeconds) * 1e3;
+				const progress = Math.max(0, Math.min(1, (sourceTime - startSeconds) / segmentDuration));
+				status.textContent = `Analizando todos los frames… ${Math.round(progress * 100)}% · ${landmarkFrames.length} frames`;
 				const result = await detectFrame(activity, source, crop);
 				visionResults.push(result);
 				if (overlay) {
 					overlay.hidden = false;
-					drawHolisticOverlay(overlay, crop ? (source.videoWidth || 640) * crop.width : source.videoWidth || 640, crop ? (source.videoHeight || 480) * crop.height : source.videoHeight || 480, result, activityFeatures(activity), crop ? "cover" : "contain");
+					drawHolisticOverlay(overlay, crop ? (source.videoWidth || 640) * crop.width : source.videoWidth || 640, crop ? (source.videoHeight || 480) * crop.height : source.videoHeight || 480, result, activityFeatures(activity), inputOverlayFit());
 				};
 				frames.push(featureFrame(result, elapsed, activityFeatures(activity)));
 				landmarkFrames.push(replayLandmarkFrame(result, source, elapsed, crop));
 			};
+			const nextPresentedFrame = () => new Promise((resolve, reject) => {
+				let settled = false;
+				const timeout = runtimeWindow.setTimeout(() => {
+					if (settled) return;
+					settled = true;
+					source.pause();
+					if (source.ended || source.currentTime >= endSeconds - .25) resolve(undefined);
+					else reject(new Error("El navegador dejó de entregar frames del video durante el análisis."));
+				}, 2e3);
+				source.requestVideoFrameCallback((_now, metadata) => {
+					if (settled) return;
+					settled = true;
+					runtimeWindow.clearTimeout(timeout);
+					source.pause();
+					resolve(metadata.mediaTime);
+				});
+				void source.play().catch((error) => {
+					if (settled) return;
+					settled = true;
+					runtimeWindow.clearTimeout(timeout);
+					reject(error);
+				});
+			});
+			source.pause();
+			await seek(source, startSeconds);
+			await analyzeCurrentFrame(startSeconds);
+			let previousMediaTime = startSeconds;
+			let repeatedFrameCount = 0;
+			while (previousMediaTime < endSeconds - .001) {
+				if (stopRequested) throw new Error("El análisis del video fue cancelado.");
+				const mediaTime = await nextPresentedFrame();
+				if (mediaTime === undefined || mediaTime > endSeconds + .001) break;
+				if (mediaTime <= previousMediaTime + 1e-4) {
+					repeatedFrameCount += 1;
+					if (repeatedFrameCount > 5) {
+						throw new Error("El video no avanzó al siguiente frame durante el análisis.");
+					};
+					continue;
+				};
+				repeatedFrameCount = 0;
+				await analyzeCurrentFrame(mediaTime);
+				previousMediaTime = mediaTime;
+			};
+			source.pause();
 			return {
 				durationMs: segmentDuration * 1e3,
 				frames,
@@ -2116,10 +2231,10 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				};
 				if (!showReference || !previewTemplate?.landmarkFrames.length) {
 					referencePreview.hidden = true;
-					referencePreviewStatus.textContent = previewVideoUrl ? showFrame ? "Frame listo." : showReference ? "El origen no incluye puntos analizados." : "Video listo." : "La práctica no tiene una reproducción visual guardada.";
+					referencePreviewStatus.textContent = previewVideoUrl ? showFrame ? "Frame listo." : showReference ? "El origen no incluye puntos analizados." : "Video listo." : "Práctica recibida. Este registro no tiene video ni referencia visual guardados.";
 					if (referenceEmpty) {
 						referenceEmpty.hidden = Boolean(previewVideoUrl);
-						referenceEmpty.textContent = "Referencia visual no disponible.";
+						referenceEmpty.textContent = "Práctica cargada sin referencia visual.";
 					};
 					if (referenceReplay) referenceReplay.disabled = !previewVideoUrl || showFrame;
 					return;
@@ -2205,7 +2320,12 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const captureInput = async () => {
 			if (fileInput?.files?.[0] && selectedVideoUrl) {
 				motionInput?.classList.remove("is-mirrored");
-				if (stopButton) stopButton.hidden = true;
+				if (stopButton) {
+					stopButton.textContent = "Cancelar análisis";
+					stopButton.hidden = false;
+					stopButton.disabled = false;
+				};
+				setAnalyzeState("processing");
 				return analyzeSelectedVideo(video);
 			};
 			if (activity.input.type === "url") {
@@ -2234,6 +2354,9 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				};
 				return captureVideo(source, activity.input.continuous ? Number.POSITIVE_INFINITY : activity.input.durationMs, activity.input.continuous);
 			};
+			if (activity.input.type === "upload") {
+				throw new Error("Selecciona un archivo de video antes de iniciar el análisis.");
+			};
 			stream = await navigator.mediaDevices.getUserMedia({
 				video: { facingMode: activity.input.facingMode },
 				audio: false
@@ -2245,6 +2368,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			if (placeholder) placeholder.hidden = true;
 			status.textContent = "Prepárate…";
 			await new Promise((resolve) => runtimeWindow.setTimeout(resolve, 1e3));
+			setAnalyzeState("capturing");
 			const manualStop = activity.input.continuous || activity.mode === "reference" || activity.mode === "compare";
 			if (manualStop && stopButton) {
 				stopButton.hidden = false;
@@ -2254,7 +2378,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			const recordedChunks = [];
 			let recorderStopped;
 			const MediaRecorderConstructor = runtimeWindow.MediaRecorder;
-			if (activity.mode === "compare" && typeof MediaRecorderConstructor === "function") {
+			if ((activity.mode === "compare" || activity.mode === "analyze") && typeof MediaRecorderConstructor === "function") {
 				try {
 					const activeRecorder = new MediaRecorderConstructor(stream);
 					recorder = activeRecorder;
@@ -2270,7 +2394,8 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 					recorderStopped = undefined;
 				}
 			};
-			const captured = await captureVideo(video, activity.input.continuous ? Number.POSITIVE_INFINITY : activity.input.durationMs, manualStop);
+			const captureDuration = activity.mode === "analyze" ? activity.input.durationMs : activity.input.continuous ? Number.POSITIVE_INFINITY : activity.input.durationMs;
+			const captured = await captureVideo(video, captureDuration, manualStop);
 			if (recorder?.state === "recording") {
 				recorder.stop();
 				await recorderStopped;
@@ -2283,37 +2408,87 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		};
 		const replay = async (range = [0, 1]) => {
 			if (!overlay || !recordedLandmarkFrames.length || !replayButton) return;
+			if (activity.mode === "analyze" && analyzeReviewRunning) {
+				analyzeReviewPaused = !analyzeReviewPaused;
+				replayButton.textContent = analyzeReviewPaused ? "Continuar revisión" : "Pausar revisión";
+				if (analyzeReviewPaused) video.pause();
+				else await video.play().catch(() => undefined);
+				status.textContent = analyzeReviewPaused ? "Revisión pausada." : "Reproduciendo el análisis…";
+				return;
+			};
 			const replayFrames = landmarkRange(recordedLandmarkFrames, range);
 			if (!replayFrames.length) return;
 			const generation = ++replayGeneration;
 			button.disabled = true;
-			replayButton.disabled = true;
+			replayButton.disabled = activity.mode !== "analyze";
+			analyzeReviewPaused = false;
+			analyzeReviewRunning = activity.mode === "analyze";
+			if (activity.mode === "analyze") replayButton.textContent = "Pausar revisión";
 			video.hidden = true;
 			overlay.hidden = false;
 			if (placeholder) placeholder.hidden = true;
-			status.textContent = activity.mode === "compare" ? "Reproduciendo tu intento…" : "Reproduciendo referencia…";
-			if (activity.mode === "compare" && learnerRecordingUrl) {
+			status.textContent = activity.mode === "compare" ? "Reproduciendo tu intento…" : activity.mode === "analyze" ? "Reproduciendo el análisis…" : "Reproduciendo referencia…";
+			const reviewVideoUrl = activity.mode === "analyze" ? analyzesUploadedVideo ? selectedVideoUrl : learnerRecordingUrl : activity.mode === "compare" ? learnerRecordingUrl : undefined;
+			let reviewVideoPlaying = false;
+			if (reviewVideoUrl) {
 				video.srcObject = null;
-				video.src = learnerRecordingUrl;
+				video.src = reviewVideoUrl;
 				video.muted = true;
 				video.hidden = false;
 				if (video.readyState < 1) await waitFor(video, "loadedmetadata");
 				await seek(video, (Number.isFinite(video.duration) ? video.duration : 0) * range[0]);
-				await video.play().catch(() => undefined);
+				reviewVideoPlaying = await video.play().then(() => true).catch(() => false);
 			};
-			let previousTime = replayFrames[0].t;
-			for (const frame of replayFrames) {
-				if (generation !== replayGeneration) return;
-				const delay = Math.max(0, Math.min(500, frame.t - previousTime));
-				if (delay) await new Promise((resolve) => runtimeWindow.setTimeout(resolve, delay));
-				if (generation !== replayGeneration) return;
-				drawHolisticOverlay(overlay, frame.width, frame.height, frame, activityFeatures(activity));
-				previousTime = frame.t;
+			const drawReplayFrame = (frame) => drawHolisticOverlay(overlay, frame.width, frame.height, frame, activityFeatures(activity), inputOverlayFit());
+			if (activity.mode === "analyze" && reviewVideoPlaying && Number.isFinite(video.duration)) {
+				// The video is the review clock. Mapping its playback progress to the
+				// captured landmark timestamps prevents independent timers from
+				// drifting apart during playback or after a pause.
+				const videoStart = video.duration * range[0];
+				const videoEnd = video.duration * range[1];
+				const landmarkStart = replayFrames[0].t;
+				const landmarkEnd = replayFrames.at(-1).t;
+				const landmarkDuration = Math.max(1, landmarkEnd - landmarkStart);
+				let frameIndex = 0;
+				let renderedIndex = -1;
+				while (generation === replayGeneration) {
+					while (analyzeReviewPaused && generation === replayGeneration) {
+						await new Promise((resolve) => runtimeWindow.setTimeout(resolve, 60));
+					};
+					if (generation !== replayGeneration) return;
+					const progress = Math.max(0, Math.min(1, (video.currentTime - videoStart) / Math.max(.001, videoEnd - videoStart)));
+					const targetTime = landmarkStart + landmarkDuration * progress;
+					while (frameIndex + 1 < replayFrames.length && Math.abs(replayFrames[frameIndex + 1].t - targetTime) <= Math.abs(replayFrames[frameIndex].t - targetTime)) frameIndex += 1;
+					if (frameIndex !== renderedIndex) {
+						drawReplayFrame(replayFrames[frameIndex]);
+						renderedIndex = frameIndex;
+					};
+					if (video.ended || video.currentTime >= videoEnd - .01) break;
+					await new Promise((resolve) => runtimeWindow.requestAnimationFrame(() => resolve()));
+				};
+				drawReplayFrame(replayFrames.at(-1));
+			} else {
+				let previousTime = replayFrames[0].t;
+				for (const frame of replayFrames) {
+					if (generation !== replayGeneration) return;
+					while (activity.mode === "analyze" && analyzeReviewPaused && generation === replayGeneration) {
+						await new Promise((resolve) => runtimeWindow.setTimeout(resolve, 60));
+					};
+					if (generation !== replayGeneration) return;
+					const delay = Math.max(0, Math.min(500, frame.t - previousTime));
+					if (delay) await new Promise((resolve) => runtimeWindow.setTimeout(resolve, delay));
+					if (generation !== replayGeneration) return;
+					drawReplayFrame(frame);
+					previousTime = frame.t;
+				}
 			};
 			video.pause();
 			button.disabled = false;
 			replayButton.disabled = false;
-			status.textContent = activity.mode === "compare" ? "Recapitulación terminada. El video permanece solamente en esta pestaña." : "Reproducción terminada.";
+			analyzeReviewRunning = false;
+			analyzeReviewPaused = false;
+			if (activity.mode === "analyze") replayButton.textContent = "Reproducir de nuevo";
+			status.textContent = activity.mode === "compare" ? "Recapitulación terminada. El video permanece solamente en esta pestaña." : activity.mode === "analyze" ? "Revisión terminada. El video temporal permanece solamente en esta pestaña." : "Reproducción terminada.";
 		};
 		const replayTogether = async (referenceRange = [0, 1], learnerRange = [0, 1]) => {
 			if (!syncReplayButton || !previewTemplate?.landmarkFrames.length || !recordedLandmarkFrames.length) return;
@@ -2356,7 +2531,9 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				video.load();
 				video.hidden = true;
 				if (placeholder) placeholder.hidden = false;
-				button.textContent = "Iniciar grabación";
+				button.textContent = activity.mode === "analyze" ? "Analizar video" : "Iniciar grabación";
+				if (analyzesUploadedVideo) button.hidden = true;
+				if (analyzesUploadedVideo) setAnalyzeState("awaiting-input");
 				motionInput?.classList.toggle("is-mirrored", activity.input.type === "camera" && activity.input.facingMode === "user");
 				setReferenceSourceMode("video");
 				return;
@@ -2378,14 +2555,20 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			video.muted = true;
 			video.hidden = false;
 			if (placeholder) placeholder.hidden = true;
-			button.textContent = "Analizar tramo del video";
+			button.textContent = autoAnalyzesReferenceUpload ? "Analizar nuevamente" : "Analizar tramo del video";
+			if (analyzesUploadedVideo) {
+				button.textContent = "Analizar video";
+				setAnalyzeState("awaiting-input");
+			};
+			button.hidden = autoAnalyzesReferenceUpload;
 			status.textContent = "Cargando video…";
 			try {
 				if (video.readyState < 1) await waitFor(video, "loadedmetadata");
 				if (segmentStart) segmentStart.value = "0";
-				if (segmentEnd) segmentEnd.value = String(Math.min(10, video.duration).toFixed(1));
+				if (segmentEnd) segmentEnd.value = String((autoAnalyzesReferenceUpload ? video.duration : Math.min(10, video.duration)).toFixed(1));
 				setReferenceSourceMode("video", true);
-				status.textContent = `Video listo · ${video.duration.toFixed(1)} s. Elige el tramo.`;
+				status.textContent = autoAnalyzesReferenceUpload ? `Preparando el video completo · ${video.duration.toFixed(1)} s…` : analyzesUploadedVideo ? `Video listo · ${video.duration.toFixed(1)} s. Presiona Analizar video.` : `Video listo · ${video.duration.toFixed(1)} s. Elige el tramo.`;
+				if (autoAnalyzesReferenceUpload) await start();
 			} catch {
 				status.textContent = "No se pudo abrir ese archivo de video.";
 			}
@@ -2407,10 +2590,10 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				button.textContent = "Iniciar grabación";
 			};
 			if (videoSourceControls) videoSourceControls.hidden = mode !== "video";
-			button.hidden = mode === "existing" || mode === "video" && !fileInput?.files?.[0];
+			button.hidden = mode === "existing" || mode === "video" && !fileInput?.files?.[0] || autoAnalyzesReferenceUpload;
 			if (replayButton) replayButton.hidden = mode !== "existing" || !recordedLandmarkFrames.length;
 			if (mode === "camera") button.textContent = "Iniciar grabación";
-			if (mode === "video" && fileInput?.files?.[0]) button.textContent = "Analizar tramo";
+			if (mode === "video" && fileInput?.files?.[0]) button.textContent = autoAnalyzesReferenceUpload ? "Analizar nuevamente" : "Analizar tramo";
 			if (!preserveStatus) status.textContent = mode === "existing" ? "Referencia lista." : mode === "camera" ? "Graba una nueva referencia." : "";
 		}
 		const chooseReferenceSource = (event) => {
@@ -2427,6 +2610,16 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				if (learnerRecordingUrl) URL.revokeObjectURL(learnerRecordingUrl);
 				learnerRecordingUrl = undefined;
 			};
+			if (activity.mode === "analyze") {
+				recordedLandmarkFrames = [];
+				analyzeReviewPaused = false;
+				analyzeReviewRunning = false;
+				video.pause();
+				if (!analyzesUploadedVideo && learnerRecordingUrl) {
+					URL.revokeObjectURL(learnerRecordingUrl);
+					learnerRecordingUrl = undefined;
+				}
+			};
 			cropping = false;
 			cropStart = undefined;
 			cropDraft = undefined;
@@ -2437,6 +2630,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			replayGeneration += 1;
 			stopRequested = false;
 			button.disabled = true;
+			setAnalyzeState("preparing");
 			sourceModeButtons.forEach((candidate) => {
 				candidate.disabled = true;
 			});
@@ -2444,7 +2638,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 			video.hidden = true;
 			if (overlay) overlay.hidden = true;
 			if (placeholder) placeholder.hidden = false;
-			results.hidden = true;
+			if (results) results.hidden = true;
 			if (stageResults) stageResults.hidden = true;
 			if (stageScores) stageScores.replaceChildren();
 			if (download) download.hidden = true;
@@ -2470,7 +2664,35 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				};
 				status.textContent = "Realiza el movimiento ahora…";
 				const captured = await captureInput();
-				if (activity.mode === "compare") recordedLandmarkFrames = captured.landmarkFrames;
+				if (activity.mode === "compare" || activity.mode === "analyze") {
+					recordedLandmarkFrames = captured.landmarkFrames;
+				};
+				if (activity.mode === "analyze") {
+					if (!captured.landmarkFrames.length) {
+						throw new Error("El análisis no produjo landmark frames. Revisa el video y el modelo seleccionado.");
+					};
+					publishAnalyzeLandmarks(activity, captured.landmarkFrames);
+					setAnalyzeState("ready");
+					if (replayButton) {
+						replayButton.textContent = "Ver análisis";
+						replayButton.hidden = false;
+					};
+					const outputId = activity.runtimeOutputId || runtimeHelpers.landmarkFramesOutputId;
+					status.textContent = `${captured.landmarkFrames.length} frames del video analizados y disponibles en “${outputId}”.`;
+					root.dispatchEvent(new CustomEvent("motion:analysis", {
+						bubbles: true,
+						detail: {
+							frameCount: captured.landmarkFrames.length,
+							landmarkFrames: captured.landmarkFrames,
+							outputId,
+							sourceId: activity.runtimeSourceId
+						}
+					}));
+					return;
+				};
+				if (!results || !overall || !scores || !feedback) {
+					throw new Error("La actividad no contiene su presentación de resultados.");
+				};
 				if (!usesSequence) {
 					const evaluation = evaluateVisionResults(activity, captured.frames, captured.visionResults);
 					overall.textContent = `${evaluation.overallScore}%`;
@@ -2482,8 +2704,8 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 						return item;
 					}));
 					feedback.textContent = evaluation.feedback;
-					results.hidden = !activity.presentation.showResults;
-					status.textContent = activity.mode === "analyze" ? "Análisis detenido." : evaluation.overallScore >= passingScore(activity) ? "Objetivo alcanzado." : "No se alcanzó el objetivo.";
+					results.hidden = !showResults;
+					status.textContent = evaluation.overallScore >= passingScore(activity) ? "Objetivo alcanzado." : "No se alcanzó el objetivo.";
 					root.dispatchEvent(new CustomEvent("motion:result", {
 						bubbles: true,
 						detail: evaluation
@@ -2491,32 +2713,24 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 					await saveResult(activity, evaluation, captured.durationMs, captured.landmarkFrames);
 					return;
 				};
+				const features = activityFeatures(activity);
+				if (features.hands && captured.frames.filter(hasTrackedHand).length < 4) {
+					throw new Error("No se detectaron suficientes cuadros con las manos visibles. Mantén las manos completas dentro del recuadro hasta detener la comparación.");
+				};
+				if (features.pose && captured.frames.filter((frame) => frame.facePosture.length).length < 4) {
+					throw new Error("No se detectaron suficientes cuadros con la cabeza y los hombros visibles. Aléjate un poco de la cámara y mantente dentro del recuadro.");
+				};
 				const preparedInput = prepareSequence(captured.frames, activity);
 				if (preparedInput.length < 4) {
-					throw new Error("No hubo suficientes cuadros con seguimiento confiable. Mejora la luz y mantente dentro del encuadre.");
+					throw new Error("El seguimiento fue inestable. Mantén la posición dentro del recuadro hasta detener la comparación.");
 				};
-				if (activityFeatures(activity).hands && !preparedInput.some(hasTrackedHand)) {
+				if (features.hands && !preparedInput.some(hasTrackedHand)) {
 					throw new Error("Mantén las manos visibles durante todo el movimiento.");
 				};
-				if (activityFeatures(activity).pose && !preparedInput.some((frame) => frame.facePosture.length)) {
+				if (features.pose && !preparedInput.some((frame) => frame.facePosture.length)) {
 					throw new Error("Asegúrate de que la cabeza y los hombros estén visibles.");
 				};
 				const averageQuality = Math.round(preparedInput.reduce((total, frame) => total + (frame.quality ?? 1), 0) / preparedInput.length * 100);
-				if (activity.mode === "analyze") {
-					overall.textContent = `${averageQuality}% de seguimiento`;
-					scores.replaceChildren();
-					feedback.textContent = `Se extrajeron ${preparedInput.length} puntos temporales confiables. La secuencia está lista para usarse en otra acción.`;
-					results.hidden = !activity.presentation.showResults;
-					status.textContent = "Análisis completado.";
-					root.dispatchEvent(new CustomEvent("motion:analysis", {
-						bubbles: true,
-						detail: {
-							frames: preparedInput,
-							quality: averageQuality
-						}
-					}));
-					return;
-				};
 				if (activity.mode === "reference") {
 					recordedLandmarkFrames = captured.landmarkFrames;
 					const requiredHand = requiredHandSelect?.value === "left" || requiredHandSelect?.value === "right" || requiredHandSelect?.value === "both" || requiredHandSelect?.value === "either" ? requiredHandSelect.value : "either";
@@ -2525,10 +2739,11 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 					};
 					let preparedClip;
 					if (fileInput?.files?.[0] && captured.sourceSegment) {
-						status.textContent = "Preparando solamente el tramo y encuadre seleccionados…";
-						preparedClip = await createSelectedVideoClip(video, captured.sourceCrop, captured.sourceSegment);
+						status.textContent = autoAnalyzesReferenceUpload ? "Terminando la preparación automática…" : "Preparando solamente el tramo y encuadre seleccionados…";
+						preparedClip = autoAnalyzesReferenceUpload ? fileInput.files[0] : await createSelectedVideoClip(video, captured.sourceCrop, captured.sourceSegment);
 						if (preparedClipInput) preparedClipInput.__motionReferenceClip = preparedClip;
 					};
+					const storedSourceSegment = autoAnalyzesReferenceUpload ? undefined : captured.sourceSegment;
 					const template = {
 						version: 3,
 						detectorTask: activity.detector.task,
@@ -2536,9 +2751,9 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 						frames: preparedInput,
 						landmarkFrames: recordedLandmarkFrames,
 						requiredHand,
-						stages: runtimeHelpers.suggestMotionStages(preparedInput),
-						sourceCrop: captured.sourceCrop,
-						sourceSegment: captured.sourceSegment,
+						stages: autoAnalyzesReferenceUpload ? [] : runtimeHelpers.suggestMotionStages(preparedInput),
+						sourceCrop: autoAnalyzesReferenceUpload ? undefined : captured.sourceCrop,
+						sourceSegment: storedSourceSegment,
 						storedClip: Boolean(preparedClip),
 						storedClipDurationMs: preparedClip ? captured.durationMs : undefined,
 						approvedAt: new Date().toISOString()
@@ -2549,11 +2764,11 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 						templateField.dispatchEvent(new Event("input", { bubbles: true }));
 						templateField.dispatchEvent(new Event("change", { bubbles: true }));
 					};
-					renderStageEditor(template.stages);
+					if (!autoAnalyzesReferenceUpload) renderStageEditor(template.stages);
 					overall.textContent = "Referencia lista";
 					scores.replaceChildren();
 					const segmentLabel = captured.sourceSegment ? ` · tramo ${captured.sourceSegment.startSeconds.toFixed(1)}–${captured.sourceSegment.endSeconds.toFixed(1)} s` : "";
-					feedback.textContent = `${preparedInput.length} puntos clave · ${averageQuality}% de calidad de seguimiento${segmentLabel}. Revisa y guarda esta plantilla como referencia aprobada.`;
+					feedback.textContent = autoAnalyzesReferenceUpload ? `${preparedInput.length} muestras de movimiento · ${averageQuality}% de calidad. La referencia está lista para guardar.` : `${preparedInput.length} puntos clave · ${averageQuality}% de calidad de seguimiento${segmentLabel}. Revisa y guarda esta plantilla como referencia aprobada.`;
 					if (download && activity.referenceOutput.type === "download") {
 						if (downloadUrl) URL.revokeObjectURL(downloadUrl);
 						downloadUrl = URL.createObjectURL(new Blob([JSON.stringify(template)], { type: "application/json" }));
@@ -2563,9 +2778,9 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 					} else if (download) {
 						download.hidden = true;
 					};
-					results.hidden = !activity.presentation.showResults;
+					results.hidden = !showResults;
 					if (replayButton && recordedLandmarkFrames.length) replayButton.hidden = false;
-					status.textContent = "Plantilla compilada localmente.";
+					status.textContent = autoAnalyzesReferenceUpload ? "Video procesado. Ya puedes guardar o publicar." : "Plantilla compilada localmente.";
 					root.dispatchEvent(new CustomEvent("motion:reference", {
 						bubbles: true,
 						detail: template
@@ -2612,7 +2827,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				const weakestStage = scoredStageComparisons.slice().sort((left, right) => left.score - right.score)[0];
 				feedback.textContent = weakestStage && weakestStage.score < 75 ? `${comparison.feedback} Revisa especialmente: ${weakestStage.label}.` : comparison.feedback;
 				renderStageComparisons(stageComparisons);
-				results.hidden = !activity.presentation.showResults;
+				results.hidden = !showResults;
 				if (replayButton && recordedLandmarkFrames.length) replayButton.hidden = false;
 				if (syncReplayButton && recordedLandmarkFrames.length && previewTemplate?.landmarkFrames.length) {
 					syncReplayButton.hidden = false;
@@ -2631,6 +2846,7 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 				}
 			} catch (error) {
 				status.textContent = error instanceof Error ? error.message : "No se pudo analizar el movimiento.";
+				setAnalyzeState("error");
 				root.dispatchEvent(new CustomEvent("motion:error", {
 					bubbles: true,
 					detail: { message: status.textContent }
@@ -2650,7 +2866,10 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 		const stop = () => {
 			stopRequested = true;
 			if (stopButton) stopButton.disabled = true;
-			status.textContent = "Procesando referencia…";
+			if (activity.mode === "analyze") {
+				setAnalyzeState("processing");
+				status.textContent = analyzesUploadedVideo ? "Cancelando análisis…" : "Finalizando landmarks…";
+			} else status.textContent = "Procesando referencia…";
 		};
 		const replayCurrent = () => {
 			void replay();
@@ -2737,4 +2956,4 @@ const compareMotionStages = function compareMotionStages(reference, learner, sta
 	};
 	runtimeWindow.addEventListener("pagehide", close, { once: true });
 	return close;
-})(window, document, { compareMotionStages, compareMotionSequences, createMediaPipeVisionDetector, filterMotionFrames, reduceMotionCheckpoints, smoothMotionSequence, suggestMotionStages });
+})(window, document, { compareMotionStages, compareMotionSequences, createMediaPipeVisionDetector, filterMotionFrames, reduceMotionCheckpoints, smoothMotionSequence, suggestMotionStages, landmarkFramesOutputId: "landmark-frames", runtimeValueEventName: "builder:runtime-value", runtimeValueStoreProperty: "__BUILDER_RUNTIME_VALUE_STORE__" });
