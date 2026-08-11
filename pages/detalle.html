@@ -553,6 +553,7 @@ let attempt_result = {
         if (!Array.isArray(template?.landmarkFrames) || !template.landmarkFrames.length) throw new Error('Esta práctica necesita una referencia nueva con landmark frames.');
         if (template.version === 4 && !validReferenceSequences(template.pythonSequences, template.landmarkFrames.length)) throw new Error('Las secuencias DTW guardadas están incompletas. Vuelve a procesar la referencia.');
         const mediaUrl = await signedMediaUrl(source, session, record.media_url);
+        if (!mediaUrl) throw new Error('No se pudo acceder al video de referencia de esta práctica.');
         const referenceBundle = { ...template, recordId: record.id, mediaUrl };
         store.publish({ sourceId: 'reference-bundle', outputId: 'reference_bundle', type: 'json', value: referenceBundle });
         store.publish({ sourceId: 'practice-context', outputId: 'practice_context', type: 'json', value: { practice_id: record.id, duration_seconds: 0 } });
